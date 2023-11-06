@@ -29,7 +29,7 @@ bool ModuleSceneIntro::Start()
 	circle = App->textures->Load("Assets/wheel.png"); 
 	box = App->textures->Load("Assets/crate.png");
 	rick = App->textures->Load("Assets/rick_head.png");
-	
+	background = App->textures->Load("Assets/pinball.png");
 
 	//Audios
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -110,6 +110,9 @@ update_status ModuleSceneIntro::Update()
 
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
+	//Background Draw
+	
+	App->renderer->Blit(background, 0, 0);
 
 	// Prepare for raycast ------------------------------------------------------
 	
