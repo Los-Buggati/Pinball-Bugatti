@@ -21,6 +21,9 @@ public:
 public:
 	p2List<PhysBody*> circles;
 
+	SDL_Texture* flipper;
+	SDL_Texture* flipper2;
+
 	PhysBody* sensor;
 	bool sensed;
 

@@ -61,6 +61,12 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	float32 flipperLeftAngle = flipperLeft->body->GetAngle();
+	float32 flipperRightAngle = flipperRight->body->GetAngle();
+
+	App->renderer->Blit(flipper, 155, 695, NULL, 0, RADTODEG * (flipperLeftAngle), 0, 5);
+	App->renderer->Blit(flipper2, 240, 695, NULL, 0, RADTODEG * (flipperRightAngle), 52, 5);
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -121,20 +127,21 @@ update_status ModuleSceneIntro::Update()
 
 	return UPDATE_CONTINUE;
 }
+
 void ModuleSceneIntro::CreateFlippers() 
 {
-	int x1 = 150;
-	int y1 = 700;
+	int xL = 150;
+	int yL = 700;
 
-	int x2 = 295;
-	int y2 = 700;
+	int xR = 295;
+	int yR = 700;
 
 	int w = 51;
 	int h = 10;
 
 	// --- Left flipper ---
-	flipperLeft = App->physics->CreateRectangle(x1, y1, w, h);
-	flipperLeftPoint = App->physics->CreateCircle(x1, y2, 2);
+	flipperLeft = App->physics->CreateRectangle(xL, yL, w, h);
+	flipperLeftPoint = App->physics->CreateCircle(xL, yL, 2);
 	flipperLeftPoint->body->SetType(b2_staticBody);
 
 	// Flipper Joint (flipper rectangle x flipper circle to give it some movement)
@@ -142,17 +149,18 @@ void ModuleSceneIntro::CreateFlippers()
 
 	flipperLeftJoint.bodyA = flipperLeft->body;
 	flipperLeftJoint.bodyB = flipperLeftPoint->body;
-	flipperLeftJoint.referenceAngle = 0 * DEGTORAD;
-	flipperLeftJoint.enableLimit = true;
-	flipperLeftJoint.lowerAngle = -30 * DEGTORAD;
-	flipperLeftJoint.upperAngle = 30 * DEGTORAD;
 	flipperLeftJoint.localAnchorA.Set(PIXEL_TO_METERS(-33), 0);
 	flipperLeftJoint.localAnchorB.Set(0, 0);
+	flipperLeftJoint.enableLimit = true;
+	flipperLeftJoint.referenceAngle = 0 * DEGTORAD;
+	flipperLeftJoint.lowerAngle = -30 * DEGTORAD;
+	flipperLeftJoint.upperAngle = 30 * DEGTORAD;
+	
 	b2RevoluteJoint* joint_leftFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperLeftJoint);
 
 	// --- Right flipper ---
-	flipperRight = App->physics->CreateRectangle(x2, y2, w, h);
-	flipperRightPoint = App->physics->CreateCircle(x2, y2, 2);
+	flipperRight = App->physics->CreateRectangle(xR, yR, w, h);
+	flipperRightPoint = App->physics->CreateCircle(xR, yR, 2);
 	flipperRightPoint->body->SetType(b2_staticBody);
 
 	// Flipper Joint
@@ -160,15 +168,17 @@ void ModuleSceneIntro::CreateFlippers()
 
 	flipperRightJoint.bodyA = flipperRight->body;
 	flipperRightJoint.bodyB = flipperRightPoint->body;
-	flipperRightJoint.referenceAngle = 0 * DEGTORAD;
-	flipperRightJoint.enableLimit = true;
-	flipperRightJoint.lowerAngle = -30 * DEGTORAD;
-	flipperRightJoint.upperAngle = 30 * DEGTORAD;
 	flipperRightJoint.localAnchorA.Set(PIXEL_TO_METERS(33), 0);
 	flipperRightJoint.localAnchorB.Set(0, 0);
+	flipperRightJoint.enableLimit = true;
+	flipperRightJoint.referenceAngle = 0 * DEGTORAD;
+	flipperRightJoint.lowerAngle = -30 * DEGTORAD;
+	flipperRightJoint.upperAngle = 30 * DEGTORAD;
+	
 	b2RevoluteJoint* joint_rightFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperRightJoint);
 
-
+	flipper = App->textures->Load("Assets/negro.png");
+	flipper2 = App->textures->Load("Assets/negro.png");
 
 }
 
