@@ -28,8 +28,8 @@
 !SDL/libx86/SDL2main.lib
 !SDL_image/libx86/SDL2_image.lib
 !SDL_mixer/libx86/SDL2_mixer.lib
-!Box2D/libx86/DebugLib/Box2D.lib
-!Box2D/libx86/ReleaseLib/Box2D.lib
+!Box2D/libx86/Debug/Box2D.lib
+!Box2D/libx86/Release/Box2D.lib
 
 # Executables
 *.exe
@@ -65,7 +65,7 @@ Thumbs.db
 
 [Bb]uild
 [Bb]in
-[Dd]ebug/
+/[Dd]ebug/
 *.sbr
 *.sdf
 obj/
