@@ -6,12 +6,17 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include <sstream>
+#include <string.h>
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	ball = NULL;
 	ray_on = false;
 	sensed = false;
+	dir = true;
+	flipperforce = -250;
+	springForce = 0;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -23,13 +28,17 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->renderer->camera.x = App->renderer->camera.y = 0;
+	App->physics->Enable();
+
+	background = App->textures->Load("Assets/pinball.png");
+
+	CreateFlippers();
+	App->renderer->camera.x = App->renderer->camera.y = -100;
 
 	//Texturas
-	circle = App->textures->Load("Assets/wheel.png"); 
-	box = App->textures->Load("Assets/crate.png");
-	rick = App->textures->Load("Assets/rick_head.png");
-	background = App->textures->Load("Assets/pinball.png");
+	ball = App->textures->Load("Assets/wheel.png"); 
+	
+	
 
 	//Audios
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -65,51 +74,14 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+		flipperLeft->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+		flipperRight->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-	}
+	
 	//Background Draw
 	
 	App->renderer->Blit(background, 0, 0);
@@ -128,38 +100,11 @@ update_status ModuleSceneIntro::Update()
 
 	while(c != NULL)
 	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
+		
 	}
 
-	c = boxes.getFirst();
+	
 
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if(ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if(hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
 
 	// ray -----------------
 	if(ray_on == true)
@@ -175,6 +120,56 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	return UPDATE_CONTINUE;
+}
+void ModuleSceneIntro::CreateFlippers() 
+{
+	int x1 = 150;
+	int y1 = 700;
+
+	int x2 = 295;
+	int y2 = 700;
+
+	int w = 51;
+	int h = 10;
+
+	// --- Left flipper ---
+	flipperLeft = App->physics->CreateRectangle(x1, y1, w, h);
+	flipperLeftPoint = App->physics->CreateCircle(x1, y2, 2);
+	flipperLeftPoint->body->SetType(b2_staticBody);
+
+	// Flipper Joint (flipper rectangle x flipper circle to give it some movement)
+	b2RevoluteJointDef flipperLeftJoint;
+
+	flipperLeftJoint.bodyA = flipperLeft->body;
+	flipperLeftJoint.bodyB = flipperLeftPoint->body;
+	flipperLeftJoint.referenceAngle = 0 * DEGTORAD;
+	flipperLeftJoint.enableLimit = true;
+	flipperLeftJoint.lowerAngle = -30 * DEGTORAD;
+	flipperLeftJoint.upperAngle = 30 * DEGTORAD;
+	flipperLeftJoint.localAnchorA.Set(PIXEL_TO_METERS(-33), 0);
+	flipperLeftJoint.localAnchorB.Set(0, 0);
+	b2RevoluteJoint* joint_leftFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperLeftJoint);
+
+	// --- Right flipper ---
+	flipperRight = App->physics->CreateRectangle(x2, y2, w, h);
+	flipperRightPoint = App->physics->CreateCircle(x2, y2, 2);
+	flipperRightPoint->body->SetType(b2_staticBody);
+
+	// Flipper Joint
+	b2RevoluteJointDef flipperRightJoint;
+
+	flipperRightJoint.bodyA = flipperRight->body;
+	flipperRightJoint.bodyB = flipperRightPoint->body;
+	flipperRightJoint.referenceAngle = 0 * DEGTORAD;
+	flipperRightJoint.enableLimit = true;
+	flipperRightJoint.lowerAngle = -30 * DEGTORAD;
+	flipperRightJoint.upperAngle = 30 * DEGTORAD;
+	flipperRightJoint.localAnchorA.Set(PIXEL_TO_METERS(33), 0);
+	flipperRightJoint.localAnchorB.Set(0, 0);
+	b2RevoluteJoint* joint_rightFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperRightJoint);
+
+
+
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
