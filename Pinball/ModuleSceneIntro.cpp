@@ -25,10 +25,16 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	//Texturas
+	circle = App->textures->Load("Assets/wheel.png"); 
+	box = App->textures->Load("Assets/crate.png");
+	rick = App->textures->Load("Assets/rick_head.png");
+	
+
+	//Audios
+	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
+
+
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 

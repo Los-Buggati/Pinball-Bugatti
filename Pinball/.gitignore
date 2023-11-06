@@ -24,12 +24,12 @@
 *.la
 *.a
 *.lib
-!Game/Source/External/SDL/libx86/SDL2.lib
-!Game/Source/External/SDL/libx86/SDL2main.lib
-!Game/Source/External/SDL_image/libx86/SDL2_image.lib
-!Game/Source/External/SDL_mixer/libx86/SDL2_mixer.lib
-!Game/Source/External/Box2D/libx86/DebugLib/Box2D.lib
-!Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.lib
+!SDL/libx86/SDL2.lib
+!SDL/libx86/SDL2main.lib
+!SDL_image/libx86/SDL2_image.lib
+!SDL_mixer/libx86/SDL2_mixer.lib
+!Box2D/libx86/DebugLib/Box2D.lib
+!Box2D/libx86/ReleaseLib/Box2D.lib
 
 # Executables
 *.exe
