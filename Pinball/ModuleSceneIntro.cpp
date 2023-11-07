@@ -30,6 +30,7 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("Assets/crate.png");
 	rick = App->textures->Load("Assets/rick_head.png");
 	background = App->textures->Load("Assets/pinball.png");
+	bota = App->textures->Load("Assets/BotaBota.png");
 
 	//Audios
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -114,79 +115,39 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
 		// Pivot 0, 0
-		int Botabota[144] = {
-			341, 62,
-			369, 63,
-			396, 66,
-			423, 72,
-			445, 78,
-			467, 87,
-			481, 95,
-			498, 105,
-			514, 116,
-			524, 124,
-			537, 136,
-			554, 152,
-			565, 166,
-			575, 181,
-			586, 197,
-			594, 212,
-			602, 230,
-			608, 247,
-			614, 264,
-			618, 284,
-			622, 305,
-			623, 325,
-			622, 346,
-			620, 365,
-			618, 384,
-			614, 403,
-			608, 422,
-			601, 442,
-			591, 463,
-			582, 479,
-			566, 500,
-			551, 515,
-			537, 531,
-			521, 544,
-			504, 557,
-			488, 568,
-			469, 577,
-			449, 586,
-			426, 593,
-			404, 598,
-			377, 602,
-			353, 602,
-			324, 601,
-			298, 598,
-			273, 591,
-			245, 581,
-			220, 569,
-			196, 554,
-			177, 539,
-			160, 523,
-			142, 504,
-			126, 482,
-			112, 457,
-			99, 430,
-			91, 404,
-			84, 375,
-			82, 346,
-			82, 317,
-			84, 291,
-			91, 259,
-			100, 234,
-			110, 210,
-			124, 186,
-			141, 162,
-			157, 144,
-			182, 122,
-			204, 106,
-			229, 91,
-			254, 80,
-			279, 71,
-			300, 66,
-			320, 64
+		int Botabota[64] = {
+			42, 0,
+			52, 1,
+			61, 4,
+			68, 9,
+			73, 14,
+			77, 20,
+			80, 25,
+			82, 31,
+			83, 37,
+			83, 44,
+			83, 51,
+			81, 59,
+			77, 66,
+			72, 72,
+			65, 78,
+			57, 82,
+			47, 84,
+			37, 83,
+			27, 81,
+			18, 77,
+			11, 71,
+			5, 62,
+			1, 56,
+			0, 48,
+			0, 37,
+			1, 30,
+			4, 22,
+			8, 16,
+			13, 10,
+			19, 6,
+			27, 2,
+			34, 0
 		};
 
 		botas.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), Botabota, 144));
@@ -243,6 +204,15 @@ update_status ModuleSceneIntro::Update()
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
+	}
+
+	c = botas.getFirst();
+
+	while (c != NULL) 
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(bota, x, y, NULL, 1.0f, c->data->GetRotation());
 	}
 
 	// ray -----------------
