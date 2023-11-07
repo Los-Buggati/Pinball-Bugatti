@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
+	circle = box = rick = bota = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -110,6 +110,90 @@ update_status ModuleSceneIntro::Update()
 
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+	{
+		// Pivot 0, 0
+		int Botabota[144] = {
+			341, 62,
+			369, 63,
+			396, 66,
+			423, 72,
+			445, 78,
+			467, 87,
+			481, 95,
+			498, 105,
+			514, 116,
+			524, 124,
+			537, 136,
+			554, 152,
+			565, 166,
+			575, 181,
+			586, 197,
+			594, 212,
+			602, 230,
+			608, 247,
+			614, 264,
+			618, 284,
+			622, 305,
+			623, 325,
+			622, 346,
+			620, 365,
+			618, 384,
+			614, 403,
+			608, 422,
+			601, 442,
+			591, 463,
+			582, 479,
+			566, 500,
+			551, 515,
+			537, 531,
+			521, 544,
+			504, 557,
+			488, 568,
+			469, 577,
+			449, 586,
+			426, 593,
+			404, 598,
+			377, 602,
+			353, 602,
+			324, 601,
+			298, 598,
+			273, 591,
+			245, 581,
+			220, 569,
+			196, 554,
+			177, 539,
+			160, 523,
+			142, 504,
+			126, 482,
+			112, 457,
+			99, 430,
+			91, 404,
+			84, 375,
+			82, 346,
+			82, 317,
+			84, 291,
+			91, 259,
+			100, 234,
+			110, 210,
+			124, 186,
+			141, 162,
+			157, 144,
+			182, 122,
+			204, 106,
+			229, 91,
+			254, 80,
+			279, 71,
+			300, 66,
+			320, 64
+		};
+
+		botas.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), Botabota, 144));
+	}
+
+
+
 	//Background Draw
 	
 	App->renderer->Blit(background, 0, 0);
