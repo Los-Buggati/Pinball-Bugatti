@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("Assets/crate.png");
 	rick = App->textures->Load("Assets/rick_head.png");
 	background = App->textures->Load("Assets/pinball.png");
-	bota = App->textures->Load("Assets/BotaBota.png");
+	bota = App->textures->Load("Assets/Botabota.png");
 
 	//Audios
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -150,7 +150,7 @@ update_status ModuleSceneIntro::Update()
 			34, 0
 		};
 
-		botas.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), Botabota, 144));
+		botas.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), Botabota, 64));
 	}
 
 
@@ -206,14 +206,14 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = botas.getFirst();
+	/*c = botas.getFirst();
 
 	while (c != NULL) 
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(bota, x, y, NULL, 1.0f, c->data->GetRotation());
-	}
+	}*/
 
 	// ray -----------------
 	if(ray_on == true)
