@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -15,6 +16,7 @@ public:
 	bool Start();
 	update_status Update();
 	void CreateFlippers();
+	void CreateLanzador();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
@@ -26,10 +28,11 @@ public:
 
 	PhysBody* sensor;
 	bool sensed;
+	int ballDiametro;
 
 	//Spring
-	PhysBody* springTop;
-	PhysBody* springBot;
+	PhysBody* lanzador;
+	PhysBody* StaticLanzador;
 	int springForce;
 
 	// Flippers
@@ -49,4 +52,5 @@ public:
 	p2Point<int> ray;
 	bool ray_on;
 	bool dir;
+
 };

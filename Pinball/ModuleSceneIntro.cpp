@@ -17,6 +17,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	dir = true;
 	flipperforce = -250;
 	springForce = 0;
+	ballDiametro = 36;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -31,7 +32,9 @@ bool ModuleSceneIntro::Start()
 	App->physics->Enable();
 
 	background = App->textures->Load("Assets/pinball.png");
-
+	flipper = App->textures->Load("Assets/negro.png");
+	flipper2 = App->textures->Load("Assets/negro.png");
+	CreateLanzador();
 	CreateFlippers();
 	App->renderer->camera.x = App->renderer->camera.y = -100;
 
@@ -74,6 +77,14 @@ update_status ModuleSceneIntro::Update()
 		ray.y = App->input->GetMouseY();
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		if (springForce < 300) {
+			springForce += 10;
+		}
+		lanzador->body->ApplyForceToCenter(b2Vec2(0, springForce), 1);
+	}
+	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
@@ -127,6 +138,25 @@ update_status ModuleSceneIntro::Update()
 
 	return UPDATE_CONTINUE;
 }
+void ModuleSceneIntro::CreateLanzador() 
+{
+	lanzador = App->physics->CreateRectangle(385, 664, 30, 20);
+	StaticLanzador = App->physics->CreateRectangle(385, 740, 30, 20);
+	StaticLanzador->body->SetType(b2_staticBody);
+
+	//Joint del muelle
+	b2DistanceJointDef MuelleJointDef;
+	MuelleJointDef.bodyA = lanzador->body;
+	MuelleJointDef.bodyB = StaticLanzador->body;
+	MuelleJointDef.localAnchorA.Set(0, 0);
+	MuelleJointDef.localAnchorB.Set(0, 0);
+	MuelleJointDef.length = 2;
+	MuelleJointDef.collideConnected = true;
+	MuelleJointDef.frequencyHz = 7.0f;
+	MuelleJointDef.dampingRatio = 0.5f;
+	b2PrismaticJoint* MuelleJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&MuelleJointDef);
+
+}
 
 void ModuleSceneIntro::CreateFlippers() 
 {
@@ -136,7 +166,7 @@ void ModuleSceneIntro::CreateFlippers()
 	int xR = 295;
 	int yR = 700;
 
-	int w = 51;
+	int w = 60;
 	int h = 10;
 
 	// --- Left flipper ---
@@ -177,8 +207,7 @@ void ModuleSceneIntro::CreateFlippers()
 	
 	b2RevoluteJoint* joint_rightFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperRightJoint);
 
-	flipper = App->textures->Load("Assets/negro.png");
-	flipper2 = App->textures->Load("Assets/negro.png");
+	
 
 }
 
