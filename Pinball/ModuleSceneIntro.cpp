@@ -103,7 +103,7 @@ update_status ModuleSceneIntro::Update()
 	
 	//Background Draw
 	
-	App->renderer->Blit(background, 0, 0);
+	App->renderer->Blit(background, 100, 100);
 
 	// Prepare for raycast ------------------------------------------------------
 	
