@@ -160,6 +160,39 @@ PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateCircleRebote(int x, int y, int radius) {
+	// Create Bumper BODY at position x,y
+	b2BodyDef bumper;
+	bumper.type = b2_staticBody;
+	bumper.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	// Add BODY to the world
+	b2Body* b = world->CreateBody(&bumper);
+
+	// Create Bumper SHAPE
+	b2CircleShape bumpershape;
+	bumpershape.m_radius = PIXEL_TO_METERS(radius);
+	bumpershape.m_p.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+
+	// Create Bumper FIXTURE
+	b2FixtureDef fixture;
+	fixture.shape = &bumpershape;
+	fixture.density = 1.0f;
+	fixture.restitution = 1, 1;
+
+	// Add fixture to the Bumper BODY
+	b->CreateFixture(&fixture);
+
+	// Create our custom PhysBody class
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	// Return our PhysBody class
+	return pbody;
+}
+
 
 
 PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
@@ -218,7 +251,7 @@ update_status ModulePhysics::PostUpdate()
 				{
 					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
 					b2Vec2 pos = f->GetBody()->GetPosition();
-					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 0, 255, 255);
 				}
 				break;
 
@@ -233,7 +266,7 @@ update_status ModulePhysics::PostUpdate()
 					{
 						v = b->GetWorldPoint(polygonShape->GetVertex(i));
 						if(i > 0)
-							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 100);
+							App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 255, 100, 0);
 
 						prev = v;
 					}
@@ -419,9 +452,77 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-	if(physA && physA->listener != NULL)
+	if (physA && physA->listener != NULL)
 		physA->listener->OnCollision(physA, physB);
 
-	if(physB && physB->listener != NULL)
+	if (physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+
+	// --- Sensors ---
+
+	//// Eh, let's check if EVERY sensor collides with EVERY ball :D
+	//p2List_item<PhysBody*>* c = App->scene_intro->balls.getFirst();
+	//while (c != NULL)
+	//{
+	//	// Side Kickers
+	//	if (physA == App->scene_intro->rightSideKicker && physB == c->data) {
+	//		c->data->body->ApplyForceToCenter(b2Vec2(0, -500), 1);
+	//		App->audio->PlayFx(App->scene_intro->sideKickerFx);
+	//		App->scene_intro->score += 50;
+	//	}
+	//	if (physA == App->scene_intro->leftSideKicker && physB == c->data) {
+	//		c->data->body->ApplyForceToCenter(b2Vec2(0, -500), 1);
+	//		App->audio->PlayFx(App->scene_intro->sideKickerFx);
+	//		App->scene_intro->score += 50;
+	//	}
+
+	//	// Jump Pads
+	//	if (physA == App->scene_intro->rightPad && physB == c->data) {
+	//		c->data->body->ApplyForceToCenter(b2Vec2(-150, -250), 1);
+	//		App->scene_intro->pd4 = true;
+	//		App->scene_intro->score += 100;
+	//		App->audio->PlayFx(App->scene_intro->bounceFx);
+	//	}
+	//	if (physA == App->scene_intro->leftPad && physB == c->data) {
+	//		c->data->body->ApplyForceToCenter(b2Vec2(150, -250), 1);
+	//		App->scene_intro->pd3 = true;
+	//		App->scene_intro->score += 100;
+	//		App->audio->PlayFx(App->scene_intro->bounceFx);
+	//	}
+
+	//	// Above flipper Jump Pads
+	//	if (physA == App->scene_intro->leftPlat && physB == c->data) {
+	//		c->data->body->ApplyForceToCenter(b2Vec2(100, -400), 1);
+	//		App->scene_intro->pd1 = true;
+	//		App->scene_intro->score += 100;
+	//		App->audio->PlayFx(App->scene_intro->bounceFx);
+	//	}
+	//	if (physA == App->scene_intro->rightPlat && physB == c->data) {
+	//		c->data->body->ApplyForceToCenter(b2Vec2(-100, -400), 1);
+	//		App->scene_intro->pd2 = true;
+	//		App->scene_intro->score += 100;
+	//		App->audio->PlayFx(App->scene_intro->bounceFx);
+	//	}
+	//	// Bumpers
+	//	if (physA == App->scene_intro->bumperTop && physB == c->data) {
+	//		App->scene_intro->score += 500;
+	//		App->audio->PlayFx(App->scene_intro->bumperfx);
+	//	}
+	//	if (physA == App->scene_intro->bumperMid && physB == c->data) {
+	//		App->scene_intro->score += 500;
+	//		App->audio->PlayFx(App->scene_intro->bumperfx);
+	//	}
+
+	//	// Losing a ball
+	//	if (physA == App->scene_intro->loseSensor && physB == c->data) {
+	//		// Delete the ball and -1 live
+	//		if (c->extraBall != true) {
+	//			App->scene_intro->lives -= 1;
+	//		}
+
+	//	}
+	//	// Next ball, plz
+	//	c = c->next;
+	//}
+
 }
