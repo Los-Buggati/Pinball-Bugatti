@@ -46,6 +46,7 @@ public:
 	PhysBody* leftSideKicker;
 	PhysBody* rightSideKicker;
 
+	PhysBody* bola;
 	SDL_Texture* ball;
 	SDL_Texture* background;
 	uint bonus_fx;

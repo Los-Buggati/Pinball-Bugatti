@@ -39,6 +39,10 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = -100;
 
 	//Texturas
+	
+	bola = App->physics->CreateCircle(100, 477, 9.5);
+	bola->listener=this;
+
 	ball = App->textures->Load("Assets/wheel.png"); 
 	
 	
@@ -49,7 +53,6 @@ bool ModuleSceneIntro::Start()
 
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
-
 	return ret;
 }
 
@@ -85,11 +88,11 @@ update_status ModuleSceneIntro::Update()
 		lanzador->body->ApplyForceToCenter(b2Vec2(0, springForce), 1);
 	}
 	
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
 		circles.getLast()->data->listener = this;
-	}
+	}*/
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
 		flipperLeft->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
@@ -97,7 +100,6 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
 		flipperRight->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
 	}
-
 	
 	//Background Draw
 	
@@ -113,15 +115,23 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
-
-	while(c != NULL)
-	{
-		
-	}
 
 	
+		int x, y;
+		bola->GetPosition(x, y);
 
+		App->renderer->Blit(ball, x, y, NULL, 1.0f,bola->GetRotation());
+
+		p2List_item<PhysBody*>* c = circles.getFirst();
+
+		while (c != NULL)
+		{
+			int x, y;
+			c->data->GetPosition(x, y);
+			if (c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
+				App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
+			c = c->next;
+		}
 
 	// ray -----------------
 	if(ray_on == true)
@@ -171,8 +181,7 @@ void ModuleSceneIntro::CreateFlippers()
 
 	// --- Left flipper ---
 	flipperLeft = App->physics->CreateRectangle(xL, yL, w, h);
-	flipperLeftPoint = App->physics->CreateCircle(xL, yL, 2);
-	flipperLeftPoint->body->SetType(b2_staticBody);
+	flipperLeftPoint = App->physics->CreateCircleSensor(xL, yL, 2);
 
 	// Flipper Joint (flipper rectangle x flipper circle to give it some movement)
 	b2RevoluteJointDef flipperLeftJoint;
@@ -190,8 +199,8 @@ void ModuleSceneIntro::CreateFlippers()
 
 	// --- Right flipper ---
 	flipperRight = App->physics->CreateRectangle(xR, yR, w, h);
-	flipperRightPoint = App->physics->CreateCircle(xR, yR, 2);
-	flipperRightPoint->body->SetType(b2_staticBody);
+	flipperRightPoint = App->physics->CreateCircleSensor(xR, yR, 2);
+	
 
 	// Flipper Joint
 	b2RevoluteJointDef flipperRightJoint;
