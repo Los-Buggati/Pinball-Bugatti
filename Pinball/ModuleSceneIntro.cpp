@@ -46,7 +46,7 @@ bool ModuleSceneIntro::Start()
 	
 	punto.x = 280;
 	punto.y = 377;
-	bola = App->physics->CreateCircle(punto.x, punto.y, 13);
+	bola = App->physics->CreateCircle(punto.x, punto.y, 10);
 	bola->listener=this;
 
 	ball = App->textures->Load("Assets/wheel.png"); 
@@ -97,17 +97,17 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		if (springForce < 300) {
+		if (springForce < 400) {
 			springForce += 10;
 		}
 		lanzador->body->ApplyForceToCenter(b2Vec2(0, springForce), 1);
 	}
 	
-	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
-		circles.getLast()->data->listener = this;
-	}*/
+		bola=(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
+		
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
 		flipperLeft->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
@@ -139,6 +139,12 @@ update_status ModuleSceneIntro::Update()
 
 		while (c != NULL)
 		{
+			int x, y;
+			c->data->GetPosition(x, y);
+
+			App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
+
+			c = c->next;
 		}
 
 	// ray -----------------
@@ -168,17 +174,7 @@ void ModuleSceneIntro::CreateSensors() {
 
 	sideKickerFx = App->audio->LoadFx("pinball/audio/fx/sideKick.wav");
 
-	// Pads
-	//leftPad = App->physics->CreateRectangleSensor(0, 0, 34, 5);
-	////rightPad = App->physics->CreateRectangleSensor(0, 0, 34, 5);
-
-	//b2Vec2 posLeftPad(300, 5.85f);	// X, Y, and Angle to aply a rotation.... Idk what i'm doing but it works  
-	////rightPad->body->SetTransform(posLeftPad, -0.64f);
-
-	//b2Vec2 posRightPad(2.65f, 5.8f);
-	//leftPad->body->SetTransform(posRightPad, 0.64f);
-
-	// Platforms just above the flippers
+	
 	int LplatX = 170;
 	int LplatY = 480;
 	int RplatX = 312;

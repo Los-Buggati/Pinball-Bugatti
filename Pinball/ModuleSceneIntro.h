@@ -88,6 +88,13 @@ public:
 	float bumperMidY;
 	int count;
 
+	bool chocaBolas;
+	bool chocaRectangulosDerecha;
+	bool chocaRectangulosIzquierda;
+	bool chocaAbajo;
+
+	int score;
+
 	float bumperVel = 0.4f;
 
 };
