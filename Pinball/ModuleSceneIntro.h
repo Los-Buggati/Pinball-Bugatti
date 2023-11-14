@@ -71,6 +71,7 @@ public:
 	SDL_Texture* ball;
 	SDL_Texture* background;
 	uint bonus_fx;
+	uint music;
 	p2Point<int> ray;
 	bool ray_on;
 	bool dir;
@@ -87,7 +88,7 @@ public:
 	float bumperMidX;
 	float bumperMidY;
 	int count;
-
+	
 	float bumperVel = 0.4f;
 
 };

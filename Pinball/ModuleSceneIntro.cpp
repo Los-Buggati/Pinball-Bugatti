@@ -54,8 +54,10 @@ bool ModuleSceneIntro::Start()
 	
 
 	//Audios
+	App->audio->PlayMusic("Assets/music.wav");
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
-
+	
+	
 
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
