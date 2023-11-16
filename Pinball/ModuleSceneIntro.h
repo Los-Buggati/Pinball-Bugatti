@@ -70,7 +70,9 @@ public:
 	PhysBody* bola;
 	SDL_Texture* ball;
 	SDL_Texture* background;
+
 	uint bonus_fx;
+	uint music;
 	p2Point<int> ray;
 	bool ray_on;
 	bool dir;
@@ -78,7 +80,7 @@ public:
 
 	PhysBody* bumperTop;
 	PhysBody* bumperMid;
-
+	PhysBody* mapa;
 	Animation bumperAnim;
 	SDL_Texture* bumperTexture;
 	iPoint punto;
@@ -87,14 +89,8 @@ public:
 	float bumperMidX;
 	float bumperMidY;
 	int count;
-
-	bool chocaBolas;
-	bool chocaRectangulosDerecha;
-	bool chocaRectangulosIzquierda;
-	bool chocaAbajo;
-
-	int score;
-
+	int vidas;
+	
 	float bumperVel = 0.4f;
 
 };

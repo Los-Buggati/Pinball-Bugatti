@@ -29,6 +29,7 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+	int vidas = 3;
 
 	App->physics->Enable();
 
@@ -39,7 +40,7 @@ bool ModuleSceneIntro::Start()
 	CreateSensors();
 	flipper = App->textures->Load("Assets/negro.png");
 	flipper2 = App->textures->Load("Assets/negro.png");
-	
+
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	//Texturas
@@ -54,12 +55,75 @@ bool ModuleSceneIntro::Start()
 	
 
 	//Audios
+	App->audio->PlayMusic("Assets/music.wav");
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
+	
+	
 
-
-
+	
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	//Fisicas mapa
+	int pinball[108] = {
+	382, 377,
+	382, 715,
+	411, 713,
+	413, 295,
+	412, 225,
+	408, 211,
+	400, 184,
+	386, 158,
+	368, 134,
+	348, 112,
+	317, 95,
+	271, 82,
+	226, 82,
+	193, 89,
+	161, 107,
+	131, 133,
+	112, 159,
+	103, 175,
+	95, 192,
+	91, 209,
+	88, 226,
+	142, 284,
+	92, 332,
+	86, 346,
+	87, 363,
+	89, 376,
+	89, 389,
+	88, 402,
+	81, 415,
+	73, 427,
+	66, 435,
+	60, 442,
+	49, 451,
+	45, 468,
+	43, 486,
+	48, 501,
+	58, 508,
+	70, 514,
+	100, 514,
+	100, 705,
+	134, 703,
+	137, 645,
+	199, 708,
+	198, 768,
+	261, 768,
+	260, 713,
+	333, 640,
+	336, 704,
+	364, 704,
+	366, 380,
+	369, 373,
+	376, 373,
+	381, 376,
+	381, 375
+	};
+	mapa = App->physics->CreateChain(0, 0, pinball, 108);
+	mapa->body->SetType(b2_staticBody);
+	mapa->body->GetFixtureList()->SetRestitution(0.5f);
 	return ret;
+	
 }
 
 // Load assets
@@ -81,7 +145,7 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(flipper, 155, 695, NULL, 0, RADTODEG * (flipperLeftAngle), 0, 5);
 	App->renderer->Blit(flipper2, 240, 695, NULL, 0, RADTODEG * (flipperRightAngle), 52, 5);
-
+	
 	//bumpers
 	SDL_Rect bumpRect = bumperAnim.GetCurrentFrame();
 	App->renderer->Blit(bumperTexture, bumperTopX, bumperTopY, &bumpRect);
