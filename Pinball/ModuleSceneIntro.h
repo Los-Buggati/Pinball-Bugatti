@@ -24,9 +24,13 @@ public:
 
 public:
 	p2List<PhysBody*> circles;
+	p2List<PhysBody*> boxes;
 
 	SDL_Texture* flipper;
 	SDL_Texture* flipper2;
+
+	SDL_Texture* circle;
+	SDL_Texture* box;
 
 
 	PhysBody* sensor;
@@ -90,7 +94,8 @@ public:
 	float bumperMidY;
 	int count;
 	int vidas;
-	
+	int score;
+
 	float bumperVel = 0.4f;
 
 };

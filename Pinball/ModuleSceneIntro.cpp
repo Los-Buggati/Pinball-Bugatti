@@ -11,7 +11,8 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	//ball = NULL;
+	ball = NULL;
+	//circle = box = NULL;
 	ray_on = false;
 	sensed = false;
 	dir = true;
@@ -33,13 +34,12 @@ bool ModuleSceneIntro::Start()
 
 	App->physics->Enable();
 
-	background = App->textures->Load("Assets/pinball.png");
+	background = App->textures->Load("Assets/pinball2.png");
 	CreateLanzador();
 	CreateFlippers();
 	CreateBumpers();
 	CreateSensors();
-	flipper = App->textures->Load("Assets/negro.png");
-	flipper2 = App->textures->Load("Assets/negro.png");
+	
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -47,13 +47,16 @@ bool ModuleSceneIntro::Start()
 	
 	punto.x = 280;
 	punto.y = 377;
-	bola = App->physics->CreateCircle(punto.x, punto.y, 10);
-	bola->listener=this;
-
-	ball = App->textures->Load("Assets/wheel.png"); 
 	
 	
 
+	circles.add(App->physics->CreateCircle(400, 450, 12));
+
+	// If Box2D detects a collision with this last generated circle, it will automatically callback the function ModulePhysics::BeginContact()
+	circles.getLast()->data->listener = this;
+
+	ball = App->textures->Load("Assets/bola.png"); 
+	
 	//Audios
 	App->audio->PlayMusic("Assets/music.wav");
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -129,6 +132,7 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
+	App->textures->Unload(ball);
 	LOG("Unloading Intro scene");
 
 	return true;
@@ -169,7 +173,11 @@ update_status ModuleSceneIntro::Update()
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		bola=(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
+
+		// If Box2D detects a collision with this last generated circle, it will automatically callback the function ModulePhysics::BeginContact()
+		circles.getLast()->data->listener = this;
+		//bola=(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
 		
 	}
 
@@ -193,13 +201,23 @@ update_status ModuleSceneIntro::Update()
 
 	fVector normal(0.0f, 0.0f);
 
+	/*p2List_item<PhysBody*>* c = circles.getFirst();
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
+
+		c = c->next;
+	}*/
 	// All draw functions ------------------------------------------------------
-	punto = iPoint(METERS_TO_PIXELS(bola->body->GetPosition().x), METERS_TO_PIXELS(bola->body->GetPosition().y));
-		App->renderer->Blit(ball, punto.x-20, punto.y-20, NULL, 1.0f,bola->GetRotation());
+	/*punto = iPoint(METERS_TO_PIXELS(bola->body->GetPosition().x), METERS_TO_PIXELS(bola->body->GetPosition().y));
+		App->renderer->Blit(ball, punto.x-20, punto.y-20, NULL, 1.0f,bola->GetRotation());*/
 
 		p2List_item<PhysBody*>* c = circles.getFirst();
-		LOG("%i", (METERS_TO_PIXELS(bola->body->GetPosition().x)));
-		LOG("%i", punto.x);
+		/*LOG("%i", (METERS_TO_PIXELS(bola->body->GetPosition().x)));
+		LOG("%i", punto.x);*/
 
 		while (c != NULL)
 		{
@@ -234,7 +252,7 @@ void ModuleSceneIntro::CreateSensors() {
 	rightSideKicker = App->physics->CreateRectangleSensor(120, 708, 40, 10);
 	leftSideKicker = App->physics->CreateRectangleSensor(350, 708, 40, 10);
 
-	sideKicker = App->textures->Load("pinball/sprites/sideKicker.png");
+	sideKicker = App->textures->Load("Assets/sideKicker.png");
 
 	sideKickerFx = App->audio->LoadFx("pinball/audio/fx/sideKick.wav");
 
@@ -257,8 +275,8 @@ void ModuleSceneIntro::CreateSensors() {
 	rightPlat->body->SetTransform(posRPlat, -0.6f);
 
 	// Assign Textures and anim
-	bouncePad = App->textures->Load("pinball/sprites/bouncePad.png");
-	bouncePadB = App->textures->Load("pinball/sprites/bouncePadB.png");
+	bouncePad = App->textures->Load("Assets/bouncePad.png");
+	bouncePadB = App->textures->Load("Assets/bouncePadB.png");
 
 	int y = 0;
 	for (int i = 0; i < 5; i++) {
@@ -292,7 +310,7 @@ void ModuleSceneIntro::CreateBumpers() {
 	bumperTop = App->physics->CreateCircleRebote(bumperTopX, bumperTopY, 20);
 
 	// Animation and texture
-	bumperTexture = App->textures->Load("pinball/sprites/bumper.png");
+	bumperTexture = App->textures->Load("Assets/bumper.png");
 
 	// Mid bumper
 	bumperMidX = 235;

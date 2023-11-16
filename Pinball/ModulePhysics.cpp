@@ -452,6 +452,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
 	p2List_item<PhysBody*>* c = App->scene_intro->circles.getFirst();
 
 	if (physA && physA->listener != NULL)
@@ -459,27 +460,27 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if (physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
-
-
-	if (physA== App->scene_intro->rightSideKicker || physA== App->scene_intro->leftSideKicker)
+	while (c != NULL)
 	{
-		App->scene_intro->score += 50;
-		App->scene_intro->bola->body->ApplyForceToCenter(b2Vec2(0, -400), 1);
+		if ((physA == App->scene_intro->rightSideKicker || physA == App->scene_intro->leftSideKicker))
+		{
+			App->scene_intro->score += 50;
+			c->data->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+		}
+
+		if (physA == App->scene_intro->rightPlat)
+		{
+			App->scene_intro->score += 100;
+			c->data->body->ApplyForceToCenter(b2Vec2(-150, -200), 1);
+		}
+
+		if ((physA == App->scene_intro->leftPlat || physA == App->scene_intro->topPlat) )
+		{
+			App->scene_intro->score += 100;
+			c->data->body->ApplyForceToCenter(b2Vec2(150, -200), 1);
+		}
+		c=c->next;
 	}
-
-	if (physA==App->scene_intro->rightPlat)
-	{
-		App->scene_intro->score += 100;
-		App->scene_intro->bola->body->ApplyForceToCenter(b2Vec2(-150, -250), 1);
-	}
-
-	if (physA == App->scene_intro->leftPlat|| physA == App->scene_intro->topPlat)
-	{
-		App->scene_intro->score += 100;
-		App->scene_intro->bola->body->ApplyForceToCenter(b2Vec2(150, -250), 1);
-	}
-
-
 	
 
 	// --- Sensors ---
