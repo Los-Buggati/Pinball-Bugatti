@@ -45,11 +45,11 @@ bool ModuleSceneIntro::Start()
 
 	//Texturas
 	
-	punto.x = 280;
-	punto.y = 377;
+	/*punto.x = 280;
+	punto.y = 377;*/
 	
 	
-
+	
 	circles.add(App->physics->CreateCircle(400, 450, 12));
 
 	// If Box2D detects a collision with this last generated circle, it will automatically callback the function ModulePhysics::BeginContact()
@@ -61,10 +61,8 @@ bool ModuleSceneIntro::Start()
 	App->audio->PlayMusic("Assets/music.wav");
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 	
-	
-
-	
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+
 	//Fisicas mapa
 	int pinball[108] = {
 	382, 377,
@@ -141,14 +139,17 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	App->renderer->Blit(background, 0, 0);
+
 	App->renderer->Blit(sideKicker, 26, 500);
 	App->renderer->Blit(sideKicker, 388, 500);
 
+	//flippers impression
 	float32 flipperLeftAngle = flipperLeft->body->GetAngle();
 	float32 flipperRightAngle = flipperRight->body->GetAngle();
 
-	App->renderer->Blit(flipper, 155, 695, NULL, 0, RADTODEG * (flipperLeftAngle), 0, 5);
-	App->renderer->Blit(flipper2, 240, 695, NULL, 0, RADTODEG * (flipperRightAngle), 52, 5);
+	App->renderer->Blit(flipper, 140, 560, NULL, 0, flipperLeft->GetRotation());
+	App->renderer->Blit(flipper2, 237, 560, NULL, 0, RADTODEG * (flipperRightAngle));
 	
 	//bumpers
 	SDL_Rect bumpRect = bumperAnim.GetCurrentFrame();
@@ -165,7 +166,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		if (springForce < 400) {
+		if (springForce < 450) {
 			springForce += 10;
 		}
 		lanzador->body->ApplyForceToCenter(b2Vec2(0, springForce), 1);
@@ -187,11 +188,6 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
 		flipperRight->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
 	}
-	
-	//Background Draw
-	
-	App->renderer->Blit(background, 0, 0);
-
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
@@ -201,16 +197,6 @@ update_status ModuleSceneIntro::Update()
 
 	fVector normal(0.0f, 0.0f);
 
-	/*p2List_item<PhysBody*>* c = circles.getFirst();
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-
-		App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
-
-		c = c->next;
-	}*/
 	// All draw functions ------------------------------------------------------
 	/*punto = iPoint(METERS_TO_PIXELS(bola->body->GetPosition().x), METERS_TO_PIXELS(bola->body->GetPosition().y));
 		App->renderer->Blit(ball, punto.x-20, punto.y-20, NULL, 1.0f,bola->GetRotation());*/
@@ -340,10 +326,10 @@ void ModuleSceneIntro::CreateLanzador()
 void ModuleSceneIntro::CreateFlippers() 
 {
 	int xL = 170;
-	int yL = 620;
+	int yL = 600;
 
 	int xR = 305;
-	int yR = 620;
+	int yR = 600;
 
 	int w = 60;
 	int h = 10;
@@ -385,7 +371,8 @@ void ModuleSceneIntro::CreateFlippers()
 	
 	b2RevoluteJoint* joint_rightFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperRightJoint);
 
-	
+	flipper = App->textures->Load("Assets/palancaIzq.png");
+	flipper2 = App->textures->Load("Assets/palancaDerch.png");
 
 }
 
