@@ -4,6 +4,7 @@
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
+#include "ModulePlayer.h"
 #include "p2Point.h"
 #include "math.h"
 
@@ -393,6 +394,14 @@ void PhysBody::GetPosition(int& x, int &y) const
 	y = METERS_TO_PIXELS(pos.y) - (height);
 }
 
+void PhysBody::SetPosition(int& x, int& y)
+{
+	float xPosInMeters = PIXEL_TO_METERS(x) - (width);
+	float yPosInMeters = PIXEL_TO_METERS(y) - (height);
+
+	// Establece la posición del cuerpo usando las coordenadas en metros
+	body->SetTransform(b2Vec2(xPosInMeters, yPosInMeters), body->GetAngle());
+}
 float PhysBody::GetRotation() const
 {
 	return RADTODEG * body->GetAngle();
@@ -464,20 +473,29 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	{
 		if ((physA == App->scene_intro->rightSideKicker || physA == App->scene_intro->leftSideKicker))
 		{
+			App->player->kicker = true;
 			App->scene_intro->score += 50;
-			c->data->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+			//c->data->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 		}
 
 		if (physA == App->scene_intro->rightPlat)
 		{
+			App->player->rightPlat = true;
 			App->scene_intro->score += 100;
-			c->data->body->ApplyForceToCenter(b2Vec2(-150, -200), 1);
+			//c->data->body->ApplyForceToCenter(b2Vec2(-150, -200), 1);
 		}
 
 		if ((physA == App->scene_intro->leftPlat || physA == App->scene_intro->topPlat) )
 		{
+			App->player->leftPlat = true;
 			App->scene_intro->score += 100;
-			c->data->body->ApplyForceToCenter(b2Vec2(150, -200), 1);
+			/*c->data->body->ApplyForceToCenter(b2Vec2(150, -200), 1);*/
+		}
+		if (physA==App->scene_intro->sensor)
+		{
+			App->player->death = true;
+			//vida--;
+			
 		}
 		c=c->next;
 	}

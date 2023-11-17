@@ -2,7 +2,9 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "ModulePhysics.h"
 
+struct SDL_Texture;
 class ModulePlayer : public Module
 {
 public:
@@ -14,5 +16,14 @@ public:
 	bool CleanUp();
 
 public:
+	p2List<PhysBody*> circles;
+	PhysBody* ball;
+	iPoint position;
+	SDL_Texture* bola;
+
+	bool death;
+	bool kicker;
+	bool leftPlat;
+	bool rightPlat;
 
 };

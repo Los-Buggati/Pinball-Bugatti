@@ -55,13 +55,13 @@ bool ModuleSceneIntro::Start()
 	// If Box2D detects a collision with this last generated circle, it will automatically callback the function ModulePhysics::BeginContact()
 	circles.getLast()->data->listener = this;
 
-	ball = App->textures->Load("Assets/bola.png"); 
+	ball = App->textures->Load("Assets/negro.png"); 
 	
 	//Audios
 	App->audio->PlayMusic("Assets/music.wav");
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
 	
-	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
+	sensor = App->physics->CreateRectangleSensor(220, 770, 100, 50);
 
 	//Fisicas mapa
 	int pinball[108] = {
@@ -167,14 +167,14 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 		if (springForce < 450) {
-			springForce += 10;
+			springForce += 15;
 		}
 		lanzador->body->ApplyForceToCenter(b2Vec2(0, springForce), 1);
 	}
 	
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 12));
+		circles.add(App->physics->CreateCircle(400, 450, 12));
 
 		// If Box2D detects a collision with this last generated circle, it will automatically callback the function ModulePhysics::BeginContact()
 		circles.getLast()->data->listener = this;
@@ -198,13 +198,8 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	/*punto = iPoint(METERS_TO_PIXELS(bola->body->GetPosition().x), METERS_TO_PIXELS(bola->body->GetPosition().y));
-		App->renderer->Blit(ball, punto.x-20, punto.y-20, NULL, 1.0f,bola->GetRotation());*/
 
 		p2List_item<PhysBody*>* c = circles.getFirst();
-		/*LOG("%i", (METERS_TO_PIXELS(bola->body->GetPosition().x)));
-		LOG("%i", punto.x);*/
-
 		while (c != NULL)
 		{
 			int x, y;
@@ -305,8 +300,8 @@ void ModuleSceneIntro::CreateBumpers() {
 }
 void ModuleSceneIntro::CreateLanzador() 
 {
-	lanzador = App->physics->CreateRectangle(400, 564, 30, 20);
-	StaticLanzador = App->physics->CreateRectangle(400, 640, 30, 20);
+	lanzador = App->physics->CreateRectangle(400, 564, 28, 20);
+	StaticLanzador = App->physics->CreateRectangle(400, 640, 28, 20);
 	StaticLanzador->body->SetType(b2_staticBody);
 
 	//Joint del muelle
