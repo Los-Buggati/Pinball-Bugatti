@@ -27,7 +27,7 @@ bool Intro::Start()
 	bool ret = true;
 
 
-	background = App->textures->Load("Assets/pinball.png");
+	backgroundintro = App->textures->Load("Assets/pinball.png");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -53,13 +53,13 @@ update_status Intro::Update()
 	
 	//Background Draw
 
-	App->renderer->Blit(background, 0, 0);
+	App->renderer->Blit(backgroundintro, 0, 0);
 
 	// FadeTo --> SceneIntro ------------------------------------------------------
-	if (App->input->keys[SDL_SCANCODE_SPACE] == Key_State::KEY_DOWN) {
-		App->fade->FadeToBlack(this, (Module*)App->scene_intro, 60);
-		/*App->fade->FadeToBlack(this, (Module*)App->sceneOutro, 60); */          //OUTRO --> descomentar para probar, comentar arriba.
 
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		App->fade->FadeToBlack(this, (Module*)App->scene_intro, 60);
 	}
 
 	return UPDATE_CONTINUE;

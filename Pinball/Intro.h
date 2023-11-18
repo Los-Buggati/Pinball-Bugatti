@@ -20,7 +20,7 @@ public:
 	
 
 public:
-	
+	SDL_Texture* backgroundintro;
 
 };
 
