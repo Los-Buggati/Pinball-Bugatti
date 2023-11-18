@@ -44,7 +44,7 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody* CreateRectangle(int x, int y, int width, int height,bool rotation);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateCircleSensor(int x, int y, int radius);
 	PhysBody* CreateCircleRebote(int x, int y, int radius);

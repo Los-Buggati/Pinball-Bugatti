@@ -19,7 +19,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	bola = App->textures->Load("Assets/bola.png");
-	ball = App->physics->CreateCircle(385, 477, 12);
+	ball = App->physics->CreateCircle(390, 477, 12);
 	ball->listener = this;
 	circles.add(ball);
 	return true;
@@ -39,7 +39,7 @@ update_status ModulePlayer::Update()
 
 	if (death == true)
 	{
-		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(385), PIXEL_TO_METERS(477)), 0);
+		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(390), PIXEL_TO_METERS(477)), 0);
 		death = false;
 		
 		//App->physics->world->DestroyBody(Door->body);

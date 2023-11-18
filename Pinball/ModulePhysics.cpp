@@ -86,12 +86,20 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height,bool rotation)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
+	if (rotation==true)
+	{
+		body.fixedRotation = false;
+	}
+	else
+	{
+		body.fixedRotation = true;
+	}
+	
 	b2Body* b = world->CreateBody(&body);
 	b2PolygonShape box;
 	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
@@ -496,73 +504,4 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 			//vida--;
 			
 		}
-	
-
-	// --- Sensors ---
-
-	//// Eh, let's check if EVERY sensor collides with EVERY ball :D
-	//p2List_item<PhysBody*>* c = App->scene_intro->balls.getFirst();
-	//while (c != NULL)
-	//{
-	//	// Side Kickers
-	//	if (physA == App->scene_intro->rightSideKicker && physB == c->data) {
-	//		c->data->body->ApplyForceToCenter(b2Vec2(0, -500), 1);
-	//		App->audio->PlayFx(App->scene_intro->sideKickerFx);
-	//		App->scene_intro->score += 50;
-	//	}
-	//	if (physA == App->scene_intro->leftSideKicker && physB == c->data) {
-	//		c->data->body->ApplyForceToCenter(b2Vec2(0, -500), 1);
-	//		App->audio->PlayFx(App->scene_intro->sideKickerFx);
-	//		App->scene_intro->score += 50;
-	//	}
-
-	//	// Jump Pads
-	//	if (physA == App->scene_intro->rightPad && physB == c->data) {
-	//		c->data->body->ApplyForceToCenter(b2Vec2(-150, -250), 1);
-	//		App->scene_intro->pd4 = true;
-	//		App->scene_intro->score += 100;
-	//		App->audio->PlayFx(App->scene_intro->bounceFx);
-	//	}
-	//	if (physA == App->scene_intro->leftPad && physB == c->data) {
-	//		c->data->body->ApplyForceToCenter(b2Vec2(150, -250), 1);
-	//		App->scene_intro->pd3 = true;
-	//		App->scene_intro->score += 100;
-	//		App->audio->PlayFx(App->scene_intro->bounceFx);
-	//	}
-
-	//	// Above flipper Jump Pads
-	//	if (physA == App->scene_intro->leftPlat && physB == c->data) {
-	//		c->data->body->ApplyForceToCenter(b2Vec2(100, -400), 1);
-	//		App->scene_intro->pd1 = true;
-	//		App->scene_intro->score += 100;
-	//		App->audio->PlayFx(App->scene_intro->bounceFx);
-	//	}
-	//	if (physA == App->scene_intro->rightPlat && physB == c->data) {
-	//		c->data->body->ApplyForceToCenter(b2Vec2(-100, -400), 1);
-	//		App->scene_intro->pd2 = true;
-	//		App->scene_intro->score += 100;
-	//		App->audio->PlayFx(App->scene_intro->bounceFx);
-	//	}
-	//	// Bumpers
-	//	if (physA == App->scene_intro->bumperTop && physB == c->data) {
-	//		App->scene_intro->score += 500;
-	//		App->audio->PlayFx(App->scene_intro->bumperfx);
-	//	}
-	//	if (physA == App->scene_intro->bumperMid && physB == c->data) {
-	//		App->scene_intro->score += 500;
-	//		App->audio->PlayFx(App->scene_intro->bumperfx);
-	//	}
-
-	//	// Losing a ball
-	//	if (physA == App->scene_intro->loseSensor && physB == c->data) {
-	//		// Delete the ball and -1 live
-	//		if (c->extraBall != true) {
-	//			App->scene_intro->lives -= 1;
-	//		}
-
-	//	}
-	//	// Next ball, plz
-	//	c = c->next;
-	//}
-
 }

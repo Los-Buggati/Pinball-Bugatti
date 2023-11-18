@@ -49,9 +49,6 @@ bool ModuleSceneIntro::Start()
 	punto.y = 377;*/
 	
 	
-	
-	
-	
 	//Audios
 	App->audio->PlayMusic("Assets/music.wav");
 	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
@@ -59,63 +56,66 @@ bool ModuleSceneIntro::Start()
 	sensor = App->physics->CreateRectangleSensor(220, 770, 100, 50);
 
 	//Fisicas mapa
-	int pinball[108] = {
-	382, 377,
-	382, 715,
-	411, 713,
-	413, 295,
-	412, 225,
-	408, 211,
-	400, 184,
-	386, 158,
-	368, 134,
-	348, 112,
-	317, 95,
-	271, 82,
-	226, 82,
-	193, 89,
-	161, 107,
-	131, 133,
-	112, 159,
-	103, 175,
-	95, 192,
-	91, 209,
-	88, 226,
-	142, 284,
-	92, 332,
-	86, 346,
-	87, 363,
-	89, 376,
-	89, 389,
-	88, 402,
-	81, 415,
-	73, 427,
-	66, 435,
-	60, 442,
-	49, 451,
-	45, 468,
-	43, 486,
-	48, 501,
-	58, 508,
-	70, 514,
-	100, 514,
-	100, 705,
-	134, 703,
-	137, 645,
-	199, 708,
-	198, 768,
-	261, 768,
-	260, 713,
-	333, 640,
-	336, 704,
-	364, 704,
-	366, 380,
-	369, 373,
-	376, 373,
-	381, 376,
-	381, 375
+	int pinball2[114] = {
+	420, 695,
+	423, 210,
+	410, 183,
+	400, 165,
+	386, 145,
+	366, 123,
+	349, 110,
+	329, 96,
+	304, 85,
+	279, 80,
+	247, 80,
+	227, 81,
+	201, 85,
+	180, 94,
+	161, 104,
+	145, 118,
+	129, 133,
+	119, 146,
+	111, 156,
+	101, 173,
+	92, 203,
+	89, 230,
+	88, 246,
+	89, 269,
+	92, 365,
+	88, 385,
+	76, 400,
+	60, 412,
+	52, 418,
+	40, 440,
+	38, 460,
+	38, 478,
+	42, 492,
+	53, 505,
+	69, 512,
+	83, 515,
+	101, 517,
+	100, 682,
+	142, 680,
+	143, 648,
+	199, 706,
+	201, 768,
+	200, 791,
+	266, 788,
+	263, 708,
+	334, 635,
+	332, 705,
+	373, 704,
+	375, 518,
+	333, 462,
+	369, 401,
+	372, 387,
+	371, 359,
+	374, 326,
+	388, 326,
+	385, 692,
+	406, 693
 	};
-	mapa = App->physics->CreateChain(0, 0, pinball, 108);
+	mapa = App->physics->CreateChain(0, 0, pinball2, 114);
 	mapa->body->SetType(b2_staticBody);
 	mapa->body->GetFixtureList()->SetRestitution(0.5f);
 	return ret;
@@ -134,6 +134,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	LOG("%i",score);
 	App->renderer->Blit(background, 0, 0);
 
 	App->renderer->Blit(sideKicker, 26, 500);
@@ -225,7 +226,7 @@ void ModuleSceneIntro::CreateSensors() {
 	// --- Sensors that move the ball or something like that: ---
 
 	// Side Kickers
-	rightSideKicker = App->physics->CreateRectangleSensor(120, 708, 40, 10);
+	rightSideKicker = App->physics->CreateRectangleSensor(120, 680, 40, 10);
 	leftSideKicker = App->physics->CreateRectangleSensor(350, 708, 40, 10);
 
 	sideKicker = App->textures->Load("Assets/sideKicker.png");
@@ -286,8 +287,7 @@ void ModuleSceneIntro::CreateBumpers() {
 	bumperTop = App->physics->CreateCircleRebote(bumperTopX, bumperTopY, 20);
 
 	// Animation and texture
-	bumperTexture = App->textures->Load("Assets/bumper.png");
-
+	
 	// Mid bumper
 	bumperMidX = 235;
 	bumperMidY = 470;
@@ -295,9 +295,11 @@ void ModuleSceneIntro::CreateBumpers() {
 }
 void ModuleSceneIntro::CreateLanzador() 
 {
-	lanzador = App->physics->CreateRectangle(400, 564, 28, 20);
-	StaticLanzador = App->physics->CreateRectangle(400, 640, 28, 20);
+	lanzador = App->physics->CreateRectangle(404, 564, 30, 20,false);
+	StaticLanzador = App->physics->CreateRectangle(404, 640, 30, 20,false);
 	StaticLanzador->body->SetType(b2_staticBody);
+	
+	
 
 	//Joint del muelle
 	b2DistanceJointDef MuelleJointDef;
@@ -325,7 +327,7 @@ void ModuleSceneIntro::CreateFlippers()
 	int h = 10;
 
 	// --- Left flipper ---
-	flipperLeft = App->physics->CreateRectangle(xL, yL, w, h);
+	flipperLeft = App->physics->CreateRectangle(xL, yL, w, h,true);
 	flipperLeftPoint = App->physics->CreateCircleSensor(xL, yL, 2);
 
 	// Flipper Joint (flipper rectangle x flipper circle to give it some movement)
@@ -343,7 +345,7 @@ void ModuleSceneIntro::CreateFlippers()
 	b2RevoluteJoint* joint_leftFlipper = (b2RevoluteJoint*)App->physics->world->CreateJoint(&flipperLeftJoint);
 
 	// --- Right flipper ---
-	flipperRight = App->physics->CreateRectangle(xR, yR, w, h);
+	flipperRight = App->physics->CreateRectangle(xR, yR, w, h,true);
 	flipperRightPoint = App->physics->CreateCircleSensor(xR, yR, 2);
 	
 
