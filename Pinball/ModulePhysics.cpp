@@ -6,6 +6,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModulePlayer.h"
 #include "p2Point.h"
+#include "ModuleAudio.h"
 #include "math.h"
 
 #ifdef _DEBUG
@@ -36,6 +37,7 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
+	wheels = App->audio->LoadFx("Assets/rueda.mp3");
 
 	// big static circle as "ground" in the middle of the screen
 	
@@ -503,5 +505,11 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 			App->player->death = true;
 			//vida--;
 			
+		}
+		if (physA==App->scene_intro->bumperBig|| physA==App->scene_intro->bumperMid3||physA==App->scene_intro->bumperMid2||App->scene_intro->bumperTop)
+		{
+			
+			App->audio->PlayFx(wheels);
+;
 		}
 }

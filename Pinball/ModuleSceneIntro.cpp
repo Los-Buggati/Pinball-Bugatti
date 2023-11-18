@@ -141,18 +141,14 @@ update_status ModuleSceneIntro::Update()
 	//App->renderer->Blit(sideKicker, 388, 500);
 
 	//flippers impression
-	float32 flipperLeftAngle = flipperLeft->body->GetAngle();
-	float32 flipperRightAngle = flipperRight->body->GetAngle();
-	
 
 	App->renderer->Blit(flipper, moveIzq.x-30, moveIzq.y-50, NULL, 0, flipperLeft->GetRotation(),30,50);
 	App->renderer->Blit(flipper2, moveDerch.x-75,moveDerch.y-50, NULL, 0, flipperRight->GetRotation(),75,50);
 	
-	//bumpers
-	//SDL_Rect bumpRect = bumperAnim.GetCurrentFrame();
-	//App->renderer->Blit(bumperTexture, bumperTopX, bumperTopY, &bumpRect);
+	
+	App->renderer->Blit(plat, 93,300, NULL,0,leftPlat->GetRotation());
 
-	//App->renderer->Blit(bumperTexture, bumperMidX, bumperMidY, &bumpRect);
+	
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -233,16 +229,16 @@ void ModuleSceneIntro::CreateSensors() {
 	sideKicker = App->textures->Load("Assets/sideKicker.png");
 
 	//sideKickerFx = App->audio->LoadFx("pinball/audio/fx/sideKick.wav");
-
 	
-	int LplatX = 170;
-	int LplatY = 480;
+	int LplatX = 150;
+	int LplatY = 350;
 	int RplatX = 312;
-	int RplatY = 480;
+	int RplatY = 350;
 
 	leftPlat = App->physics->CreateRectangleSensor(LplatX, LplatY, 60, 15);
 	rightPlat = App->physics->CreateRectangleSensor(RplatX, RplatY, 60, 15);
 	topPlat = App->physics->CreateRectangleSensor(355, 310, 50, 10);
+
 	b2Vec2 posLPlat(PIXEL_TO_METERS(LplatX), PIXEL_TO_METERS(LplatY));
 	b2Vec2 posTPlat(PIXEL_TO_METERS(355), PIXEL_TO_METERS(310));
 	b2Vec2 posRPlat(PIXEL_TO_METERS(RplatX), PIXEL_TO_METERS(RplatY));
@@ -252,27 +248,8 @@ void ModuleSceneIntro::CreateSensors() {
 	topPlat->body->SetTransform(posTPlat, 0.7f);
 	rightPlat->body->SetTransform(posRPlat, -0.6f);
 
-	// Assign Textures and anim
-	//bouncePad = App->textures->Load("Assets/bouncePad.png");
-	//bouncePadB = App->textures->Load("Assets/bouncePadB.png");
+	plat = App->textures->Load("Assets/rebota.png");
 
-	int y = 0;
-	for (int i = 0; i < 5; i++) {
-		bounceAnim.PushBack({ 0,y,50,10 });
-		bounceAnim2.PushBack({ 0,y,50,10 });
-		y += 10;
-	}
-	bounceAnim.loop = bounceAnim2.loop = false;
-	bounceAnim.speed = bounceAnim2.speed = 0.5f;
-
-	y = 0;
-	for (int i = 0; i < 4; i++) {
-		bounceAnimB.PushBack({ 0,y,35,10 });
-		bounceAnimB2.PushBack({ 0,y,35,10 });
-		y += 10;
-	}
-	bounceAnimB.loop = bounceAnimB2.loop = false;
-	bounceAnimB.speed = bounceAnimB2.speed = 0.5f;
 
 	// --- Sensors that just do what a sensor do ---
 
@@ -283,16 +260,12 @@ void ModuleSceneIntro::CreateSensors() {
 
 void ModuleSceneIntro::CreateBumpers() {
 	// Top bumper
-	bumperTopX = 97;
-	bumperTopY = 470;
-	bumperTop = App->physics->CreateCircleRebote(bumperTopX, bumperTopY, 20);
-
-	// Animation and texture
 	
-	// Mid bumper
-	bumperMidX = 235;
-	bumperMidY = 470;
-	bumperMid = App->physics->CreateCircleRebote(bumperMidX, bumperMidY, 20);
+	bumperTop= App->physics->CreateCircleRebote(250, 250, 36);
+	bumperBig = App->physics->CreateCircleRebote(97, 470, 20);
+	//bumperMid1 = App->physics->CreateCircleRebote(235, 490, 16);
+	bumperMid2 = App->physics->CreateCircleRebote(263, 440, 16);
+	bumperMid3 = App->physics->CreateCircleRebote(203, 440, 16);
 }
 void ModuleSceneIntro::CreateLanzador() 
 {
@@ -318,8 +291,6 @@ void ModuleSceneIntro::CreateLanzador()
 
 void ModuleSceneIntro::CreateFlippers() 
 {
-	
-
 	int xL = 170;
 	int yL = 600;
 

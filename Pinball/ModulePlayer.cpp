@@ -5,6 +5,8 @@
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleAudio.h"
+
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -63,6 +65,7 @@ update_status ModulePlayer::Update()
 		ball->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 		kicker = false;
 	}
+
 
 	int x, y;
 	ball->GetPosition(x, y);

@@ -54,21 +54,12 @@ public:
 	PhysBody* rightSideKicker;
 	PhysBody* loseSensor;
 
-	Animation bounceAnim;
-	Animation bounceAnim2;
-	Animation bounceAnimB;
-	Animation bounceAnimB2;
-
-	SDL_Texture* bouncePad;
-	SDL_Texture* bouncePadB;
-
 	PhysBody* leftPad;
 	PhysBody* rightPad;
 
 	PhysBody* leftPlat;
 	PhysBody* rightPlat;
 	PhysBody* topPlat;
-	uint sideKickerFx;
 	SDL_Texture* sideKicker;
 
 	PhysBody* bola;
@@ -81,18 +72,18 @@ public:
 	bool ray_on;
 	bool dir;
 	//bumpers
-
 	PhysBody* bumperTop;
-	PhysBody* bumperMid;
+	PhysBody* bumperBig;
+	PhysBody* bumperMid1;
+	PhysBody* bumperMid2;
+	PhysBody* bumperMid3;
 	PhysBody* mapa;
-	Animation bumperAnim;
-	SDL_Texture* bumperTexture;
+
+	SDL_Texture* plat;
+
 	iPoint moveIzq;
 	iPoint moveDerch;
-	float bumperTopX;
-	float bumperTopY;
-	float bumperMidX;
-	float bumperMidY;
+
 	int count;
 	int vidas;
 	int score;
