@@ -125,7 +125,7 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	App->textures->Unload(ball);
+	
 	LOG("Unloading Intro scene");
 
 	return true;
@@ -137,21 +137,22 @@ update_status ModuleSceneIntro::Update()
 	LOG("%i",score);
 	App->renderer->Blit(background, 0, 0);
 
-	App->renderer->Blit(sideKicker, 26, 500);
-	App->renderer->Blit(sideKicker, 388, 500);
+	//App->renderer->Blit(sideKicker, 26, 500);
+	//App->renderer->Blit(sideKicker, 388, 500);
 
 	//flippers impression
 	float32 flipperLeftAngle = flipperLeft->body->GetAngle();
 	float32 flipperRightAngle = flipperRight->body->GetAngle();
+	
 
-	App->renderer->Blit(flipper, 140, 560, NULL, 0, flipperLeft->GetRotation());
-	App->renderer->Blit(flipper2, 237, 560, NULL, 0, RADTODEG * (flipperRightAngle));
+	App->renderer->Blit(flipper, moveIzq.x-30, moveIzq.y-50, NULL, 0, flipperLeft->GetRotation(),30,50);
+	App->renderer->Blit(flipper2, moveDerch.x-75,moveDerch.y-50, NULL, 0, flipperRight->GetRotation(),75,50);
 	
 	//bumpers
-	SDL_Rect bumpRect = bumperAnim.GetCurrentFrame();
-	App->renderer->Blit(bumperTexture, bumperTopX, bumperTopY, &bumpRect);
+	//SDL_Rect bumpRect = bumperAnim.GetCurrentFrame();
+	//App->renderer->Blit(bumperTexture, bumperTopX, bumperTopY, &bumpRect);
 
-	App->renderer->Blit(bumperTexture, bumperMidX, bumperMidY, &bumpRect);
+	//App->renderer->Blit(bumperTexture, bumperMidX, bumperMidY, &bumpRect);
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -231,7 +232,7 @@ void ModuleSceneIntro::CreateSensors() {
 
 	sideKicker = App->textures->Load("Assets/sideKicker.png");
 
-	sideKickerFx = App->audio->LoadFx("pinball/audio/fx/sideKick.wav");
+	//sideKickerFx = App->audio->LoadFx("pinball/audio/fx/sideKick.wav");
 
 	
 	int LplatX = 170;
@@ -252,8 +253,8 @@ void ModuleSceneIntro::CreateSensors() {
 	rightPlat->body->SetTransform(posRPlat, -0.6f);
 
 	// Assign Textures and anim
-	bouncePad = App->textures->Load("Assets/bouncePad.png");
-	bouncePadB = App->textures->Load("Assets/bouncePadB.png");
+	//bouncePad = App->textures->Load("Assets/bouncePad.png");
+	//bouncePadB = App->textures->Load("Assets/bouncePadB.png");
 
 	int y = 0;
 	for (int i = 0; i < 5; i++) {
@@ -317,6 +318,8 @@ void ModuleSceneIntro::CreateLanzador()
 
 void ModuleSceneIntro::CreateFlippers() 
 {
+	
+
 	int xL = 170;
 	int yL = 600;
 
@@ -325,6 +328,9 @@ void ModuleSceneIntro::CreateFlippers()
 
 	int w = 60;
 	int h = 10;
+
+	moveDerch=iPoint(xR,yR);
+	moveIzq=iPoint(xL,yL);
 
 	// --- Left flipper ---
 	flipperLeft = App->physics->CreateRectangle(xL, yL, w, h,true);

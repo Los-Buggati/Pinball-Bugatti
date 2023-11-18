@@ -87,7 +87,8 @@ public:
 	PhysBody* mapa;
 	Animation bumperAnim;
 	SDL_Texture* bumperTexture;
-	iPoint punto;
+	iPoint moveIzq;
+	iPoint moveDerch;
 	float bumperTopX;
 	float bumperTopY;
 	float bumperMidX;
