@@ -50,12 +50,7 @@ bool ModuleSceneIntro::Start()
 	
 	
 	
-	circles.add(App->physics->CreateCircle(400, 450, 12));
-
-	// If Box2D detects a collision with this last generated circle, it will automatically callback the function ModulePhysics::BeginContact()
-	circles.getLast()->data->listener = this;
-
-	ball = App->textures->Load("Assets/negro.png"); 
+	
 	
 	//Audios
 	App->audio->PlayMusic("Assets/music.wav");
