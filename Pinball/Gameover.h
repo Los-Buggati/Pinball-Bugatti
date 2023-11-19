@@ -22,7 +22,9 @@ public:
 
 public:
 	SDL_Texture* gameover;
+	SDL_Texture* scoreFont;
 	Module* moduleToEnable = nullptr;
+	SDL_Rect scoreRect[10];
 
 };
 
