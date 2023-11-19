@@ -28,6 +28,8 @@ Start:
 
 - FPS cap: Keyboard = F11
 
+- Gravity modifier = F3
+
 (You can use the mouse to move the ball as you wish)
 
 
