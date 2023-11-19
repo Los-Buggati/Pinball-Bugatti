@@ -111,6 +111,11 @@ update_status ModulePlayer::Update()
 		App->audio->PlayFx(combo);
 	}
 
+	if (score > highScore)
+	{
+		highScore = score;
+	}
+
 	int x, y;
 	ball->GetPosition(x, y);
 

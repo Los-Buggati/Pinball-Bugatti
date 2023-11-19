@@ -36,10 +36,7 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	if (App->player->score > highScore)
-	{
-		highScore = App->player->score;
-	}
+	
 	
 	for (int i = 0; i < 10; i++)
 	{
