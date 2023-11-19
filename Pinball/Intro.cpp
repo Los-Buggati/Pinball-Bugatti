@@ -37,7 +37,7 @@ bool Intro::Start()
 	//Texturas
 
 	//Audios
-	/*bonus_fx = App->audio->LoadFx("Assets/bonus.wav");*/
+	App->audio->PlayMusic("Assets/NewBugatti.wav");
 
 	return ret;
 }
