@@ -47,6 +47,24 @@ bool ModulePhysics::Start()
 // 
 update_status ModulePhysics::PreUpdate()
 {
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		gravedad = !gravedad;
+		
+	}
+
+	if (gravedad==true)
+	{
+		customGravity = 9.8f;  // Por ejemplo, cambia la dirección de la gravedad
+		b2Vec2 gravity(0.0f, customGravity);
+		world->SetGravity(gravity);
+	}if (gravedad==false)
+	{
+		customGravity = 7.0f;  // Por ejemplo, cambia la dirección de la gravedad
+		b2Vec2 gravity(0.0f, customGravity);
+		world->SetGravity(gravity);
+	}
 	world->Step(1.0f / 60.0f, 6, 2);
 
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())

@@ -58,6 +58,8 @@ public:
 
 private:
 
+	bool gravedad;
+	float customGravity = -9.8f;
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* mouse_body;
