@@ -16,6 +16,13 @@
 
 Application::Application()
 {
+	Timer timer = Timer();
+	startupTime = Timer();
+	frameTime = PerfTimer();
+	lastSecFrameTime = PerfTimer();
+
+	frames = 0;
+
 	renderer = new ModuleRender(this);
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
@@ -62,10 +69,11 @@ Application::~Application()
 	}
 }
 
+
 bool Application::Init()
 {
 	bool ret = true;
-
+	Timer timer = Timer();
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
 
@@ -134,6 +142,7 @@ update_status Application::Update()
 	{
 		maxFrameDuration = 16;
 	}
+	frameTime.Start();
 	double currentDt = frameTime.ReadMs();
 	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
 		uint32 delay = (uint32)(maxFrameDuration - currentDt);

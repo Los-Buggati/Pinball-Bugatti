@@ -2,8 +2,10 @@
 
 #include "p2List.h"
 #include "Globals.h"
+#include "Module.h"
 #include "PerfTimer.h"
 #include "Timer.h"
+#include "SString.h"
 
 class Module;
 
@@ -51,6 +53,11 @@ public:
 	float averageFps = 0.0f;
 	uint32 secondsSinceStartup = 0;
 
+	int argc;
+	char** args;
+	SString title;
+	SString organization;
+
 	uint32 maxFrameDuration = 16;
 
 private:
@@ -63,6 +70,7 @@ public:
 	~Application();
 
 	bool Init();
+
 	update_status Update();
 	bool CleanUp();
 
