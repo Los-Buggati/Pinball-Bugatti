@@ -67,6 +67,18 @@ update_status ModulePlayer::Update()
 		ball->body->ApplyForceToCenter(b2Vec2(0, -200), 1);
 		kicker = false;
 	}
+	/*if (rightWall==true)
+	{
+		App->scene_intro->score += 100;
+		ball->body->ApplyForceToCenter(b2Vec2(150, 100), 1);
+		rightWall = false;
+	}
+	if (leftWall==true)
+	{
+		App->scene_intro->score += 100;
+		ball->body->ApplyForceToCenter(b2Vec2(-150, 100), 1);
+		leftWall = false;
+	}*/
 
 
 

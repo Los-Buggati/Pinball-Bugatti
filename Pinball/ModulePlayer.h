@@ -25,6 +25,8 @@ public:
 	bool kicker;
 	bool leftPlat;
 	bool rightPlat;
+	bool leftWall;
+	bool rightWall;
 
 	int lifes = 3;
 

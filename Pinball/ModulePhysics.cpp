@@ -519,26 +519,26 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		{
 			App->player->kicker = true;
 			App->scene_intro->score += 50;
-			//c->data->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+			
 		}
 
 		if (physA == App->scene_intro->rightPlat)
 		{
 			App->player->rightPlat = true;
-			App->scene_intro->score += 100;
-			//c->data->body->ApplyForceToCenter(b2Vec2(-150, -200), 1);
+			
+			
 		}
 
 		if ((physA == App->scene_intro->leftPlat || physA == App->scene_intro->topPlat) )
 		{
 			App->player->leftPlat = true;
-			App->scene_intro->score += 100;
-			/*c->data->body->ApplyForceToCenter(b2Vec2(150, -200), 1);*/
+			
+		
 		}
 		if (physA==App->scene_intro->sensor)
 		{
 			App->player->death = true;
-			//vida--;
+			
 			
 		}
 		if (physA==App->scene_intro->bumperBig|| physA==App->scene_intro->bumperMid3||physA==App->scene_intro->bumperMid2||App->scene_intro->bumperTop)
@@ -547,4 +547,13 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 			App->audio->PlayFx(wheels);
 ;
 		}
+
+		/*if ((physA == App->scene_intro->leftWall || physA == App->scene_intro->topWall))
+		{
+			App->player->leftWall=true;
+		}
+		if (physA == App->scene_intro->rightWall)
+		{
+			App->player->rightWall = true;
+		}*/
 }

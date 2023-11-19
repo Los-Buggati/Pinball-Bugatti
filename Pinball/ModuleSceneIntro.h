@@ -62,6 +62,10 @@ public:
 	PhysBody* leftPlat;
 	PhysBody* rightPlat;
 	PhysBody* topPlat;
+
+	PhysBody* leftWall;
+	PhysBody* rightWall;
+	PhysBody* topWall;
 	SDL_Texture* sideKicker;
 
 	PhysBody* bola;

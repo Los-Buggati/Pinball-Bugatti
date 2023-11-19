@@ -144,13 +144,6 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(gasofa);
 
 	// Unload audio
-
-
-
-	// Disable modules
-
-
-
 	// Destroy scene elements
 	if (mapa != nullptr) {
 		App->physics->world->DestroyBody(mapa->body);
@@ -319,17 +312,33 @@ void ModuleSceneIntro::CreateSensors() {
 	int RplatY = 350;
 
 	leftPlat = App->physics->CreateRectangleSensor(LplatX, LplatY, 60, 15);
+	leftWall = App->physics->CreateRectangle(LplatX-2, LplatY+15, 60, 2,NULL);
+	leftWall->body->SetType(b2_staticBody);
+
 	rightPlat = App->physics->CreateRectangleSensor(RplatX, RplatY, 60, 15);
+	rightWall = App->physics->CreateRectangle(RplatX, RplatY+15, 60, 2,NULL);
+	rightWall->body->SetType(b2_staticBody);
+
 	topPlat = App->physics->CreateRectangleSensor(355, 280, 60, 15);
+	topWall = App->physics->CreateRectangle(355, 295, 60, 2,NULL);
+	topWall->body->SetType(b2_staticBody);
 
 	b2Vec2 posLPlat(PIXEL_TO_METERS(LplatX), PIXEL_TO_METERS(LplatY));
 	b2Vec2 posTPlat(PIXEL_TO_METERS(355), PIXEL_TO_METERS(280));
 	b2Vec2 posRPlat(PIXEL_TO_METERS(RplatX), PIXEL_TO_METERS(RplatY));
 
+	b2Vec2 posLWall(PIXEL_TO_METERS(147), PIXEL_TO_METERS(360));
+	b2Vec2 posTWall(PIXEL_TO_METERS(353), PIXEL_TO_METERS(293));
+	b2Vec2 posRWall(PIXEL_TO_METERS(316), PIXEL_TO_METERS(360));
+
 
 	leftPlat->body->SetTransform(posLPlat, 0.6f); 
 	topPlat->body->SetTransform(posTPlat, 0.9f);
 	rightPlat->body->SetTransform(posRPlat, -0.6f);
+
+	leftWall->body->SetTransform(posLWall, 0.6f);
+	topWall->body->SetTransform(posTWall, 0.9f);
+	rightWall->body->SetTransform(posRWall, -0.6f);
 
 	plat = App->textures->Load("Assets/barrera.png");
 	
