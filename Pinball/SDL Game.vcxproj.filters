@@ -12,6 +12,9 @@
     <Filter Include="Header Files\Containers">
       <UniqueIdentifier>{97c4111e-b102-4ba8-9053-6f07ccbbe3d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{925c15a6-70bf-4aba-83c5-6e9ad45f3b6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -66,6 +69,19 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gameover.h">
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SString.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -76,7 +92,7 @@
     <ClCompile Include="ModuleWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
+    <ClCompile Include="Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
@@ -110,6 +126,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Gameover.cpp">
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
