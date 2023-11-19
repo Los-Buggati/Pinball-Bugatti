@@ -10,12 +10,21 @@
 #include "ModulePhysics.h"
 #include "Intro.h"
 #include "ModuleSceneIntro.h"
+#include "Gameover.h"
+#include "ModuleFonts.h"
 
 
 #include "Application.h"
 
 Application::Application()
 {
+	Timer timer = Timer();
+	startupTime = Timer();
+	frameTime = PerfTimer();
+	lastSecFrameTime = PerfTimer();
+
+	frames = 0;
+
 	renderer = new ModuleRender(this);
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
@@ -26,6 +35,8 @@ Application::Application()
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
 	fade = new ModuleFadeToBlack(this);
+	game_over = new Gameover(this);
+	fonts = new ModuleFonts(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -40,11 +51,13 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
+	AddModule(fonts);
 	
 
 	// Scenes
 	AddModule(intro);
 	AddModule(scene_intro);
+	AddModule(game_over);
 
 	
 	// Player
@@ -62,10 +75,11 @@ Application::~Application()
 	}
 }
 
+
 bool Application::Init()
 {
 	bool ret = true;
-
+	Timer timer = Timer();
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
 
@@ -120,6 +134,59 @@ update_status Application::Update()
 			ret = item->data->PostUpdate();
 		item = item->next;
 	}
+	//AQUIIIIIIIIIIIIIIIII	
+
+	if (input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	{
+		unlimitFrames = !unlimitFrames;
+	}
+	if (unlimitFrames)
+	{
+		maxFrameDuration = 32; //now is variable
+	}
+	else
+	{
+		maxFrameDuration = 16;
+	}
+	frameTime.Start();
+	double currentDt = frameTime.ReadMs();
+	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
+		uint32 delay = (uint32)(maxFrameDuration - currentDt);
+
+		PerfTimer delayTimer = PerfTimer();
+		SDL_Delay(delay);
+		//LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
+	}
+
+
+	// L1: DONE 4: Calculate:
+	// Amount of frames since startup
+	frameCount++;
+
+	// Amount of time since game start (use a low resolution timer)
+	secondsSinceStartup = startupTime.ReadSec();
+
+	// Amount of ms took the last update (dt)
+	dt = (float)frameTime.ReadMs();
+
+	// Amount of frames during the last second
+	lastSecFrameCount++;
+
+	// Average FPS for the whole game life
+	if (lastSecFrameTime.ReadMs() > 1000) {
+		lastSecFrameTime.Start();
+		averageFps = (averageFps + lastSecFrameCount) / 2;
+		framesPerSecond = lastSecFrameCount;
+		lastSecFrameCount = 0;
+	}
+
+
+	// Shows the time measurements in the window title
+	static char title[256];
+	sprintf_s(title, 256, "Av.FPS: %.2f Last FPS: %i Last dt: %.0f High score:  %I32u Frame Count: %I64u ",
+		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+
+	window->SetTitle(title);
 
 	return ret;
 }

@@ -20,10 +20,23 @@ public:
 	PhysBody* ball;
 	iPoint position;
 	SDL_Texture* bola;
+	uint wheels;
+	uint flush;
+	uint platform;
+	uint combo;
 
 	bool death;
 	bool kicker;
 	bool leftPlat;
 	bool rightPlat;
+	bool leftWall;
+	bool rightWall;
+	bool changeForce;
+	bool combito;
+
+	int force=100;
+	int score;
+	int highScore;
+	int lifes = 3;
 
 };

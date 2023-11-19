@@ -19,7 +19,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -37,7 +37,6 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-	wheels = App->audio->LoadFx("Assets/rueda.mp3");
 
 	// big static circle as "ground" in the middle of the screen
 	
@@ -48,6 +47,24 @@ bool ModulePhysics::Start()
 // 
 update_status ModulePhysics::PreUpdate()
 {
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		gravedad = !gravedad;
+		
+	}
+
+	if (gravedad==true)
+	{
+		customGravity = 9.8f;  // Por ejemplo, cambia la dirección de la gravedad
+		b2Vec2 gravity(0.0f, customGravity);
+		world->SetGravity(gravity);
+	}if (gravedad==false)
+	{
+		customGravity = 7.0f;  // Por ejemplo, cambia la dirección de la gravedad
+		b2Vec2 gravity(0.0f, customGravity);
+		world->SetGravity(gravity);
+	}
 	world->Step(1.0f / 60.0f, 6, 2);
 
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
@@ -240,8 +257,43 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 	return pbody;
 }
+PhysBody* ModulePhysics::CreateSolidChain(int x, int y, int* points, int size) {
+	// Create BODY at position x,y
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-// 
+
+	b2Body* b = world->CreateBody(&body);
+
+	// Create SHAPE
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+	shape.CreateLoop(p, size / 2);
+
+	// Create FIXTURE
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+
+	b->CreateFixture(&fixture);
+
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+
+	return pbody;
+}
+
 update_status ModulePhysics::PostUpdate()
 {
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -483,33 +535,38 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		if ((physA == App->scene_intro->rightSideKicker || physA == App->scene_intro->leftSideKicker))
 		{
 			App->player->kicker = true;
-			App->scene_intro->score += 50;
-			//c->data->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+			App->player->score += 50;
+			
 		}
 
 		if (physA == App->scene_intro->rightPlat)
 		{
 			App->player->rightPlat = true;
-			App->scene_intro->score += 100;
-			//c->data->body->ApplyForceToCenter(b2Vec2(-150, -200), 1);
+			
+			
 		}
 
 		if ((physA == App->scene_intro->leftPlat || physA == App->scene_intro->topPlat) )
 		{
 			App->player->leftPlat = true;
-			App->scene_intro->score += 100;
-			/*c->data->body->ApplyForceToCenter(b2Vec2(150, -200), 1);*/
+			
+		
 		}
 		if (physA==App->scene_intro->sensor)
 		{
 			App->player->death = true;
-			//vida--;
+			
 			
 		}
-		if (physA==App->scene_intro->bumperBig|| physA==App->scene_intro->bumperMid3||physA==App->scene_intro->bumperMid2||App->scene_intro->bumperTop)
+		
+		
+
+		if ((physA == App->scene_intro->leftWall || physA == App->scene_intro->topWall))
 		{
-			
-			App->audio->PlayFx(wheels);
-;
+			App->player->leftWall=true;
+		}
+		if (physA == App->scene_intro->rightWall)
+		{
+			App->player->rightWall = true;
 		}
 }

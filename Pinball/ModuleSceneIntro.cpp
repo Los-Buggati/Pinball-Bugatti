@@ -7,8 +7,11 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
+#include "ModuleFadeToBlack.h"
+#include "ModuleFonts.h"
 #include <sstream>
 #include <string.h>
+using namespace std;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -32,16 +35,29 @@ bool ModuleSceneIntro::Start()
 	App->player->Enable();
 	LOG("Loading Intro assets");
 	bool ret = true;
-	int vidas = 3;
+
+	if (App->player->score > highScore)
+	{
+		highScore = App->player->score;
+	}
+	
+	for (int i = 0; i < 10; i++)
+	{
+		scoreRect[i] = { (16 + 6) * i, 0, 16, 28 };
+	}
 
 	App->physics->Enable();
 	disco = App->textures->Load("Assets/discos.png");
 	background = App->textures->Load("Assets/pinballgd.png");
+	hud = App->textures->Load("Assets/hud.png");
+	gasofa = App->textures->Load("Assets/gasofa.png");
 	CreateLanzador();
 	CreateFlippers();
 	CreateBumpers();
 	CreateSensors();
 	
+	
+	scoreFont = App->textures->Load("Assets/nums.png");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -53,7 +69,7 @@ bool ModuleSceneIntro::Start()
 	
 	//Audios
 	App->audio->PlayMusic("Assets/music.wav");
-	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
+	palas = App->audio->LoadFx("Assets/metal.wav");
 	
 	sensor = App->physics->CreateRectangleSensor(220, 770, 100, 50);
 
@@ -120,15 +136,59 @@ bool ModuleSceneIntro::Start()
 	mapa = App->physics->CreateChain(0, 0, pinball2, 114);
 	mapa->body->SetType(b2_staticBody);
 	mapa->body->GetFixtureList()->SetRestitution(0.5f);
+
+
 	return ret;
 	
 }
 
-// Load assets
+// Unload assets
 bool ModuleSceneIntro::CleanUp()
 {
 	
 	LOG("Unloading Intro scene");
+	
+	App->textures->Unload(disco);
+	App->textures->Unload(background);
+	App->textures->Unload(sideKicker);
+	App->textures->Unload(plat);
+	App->textures->Unload(piston);
+	App->textures->Unload(flipper);
+	App->textures->Unload(flipper2);
+	App->textures->Unload(hud);
+	App->textures->Unload(gasofa);
+
+	// Unload audio
+	// Destroy scene elements
+	if (mapa != nullptr) {
+		App->physics->world->DestroyBody(mapa->body);
+		mapa = nullptr;
+	}
+
+	// Destroy sensors
+	App->physics->world->DestroyBody(sensor->body);
+	App->physics->world->DestroyBody(rightSideKicker->body);
+	App->physics->world->DestroyBody(leftSideKicker->body);
+	App->physics->world->DestroyBody(leftPlat->body);
+	App->physics->world->DestroyBody(rightPlat->body);
+	App->physics->world->DestroyBody(topPlat->body);
+	App->physics->world->DestroyBody(loseSensor->body);
+
+	// Destroy bumpers
+	App->physics->world->DestroyBody(bumperTop->body);
+	App->physics->world->DestroyBody(bumperBig->body);
+	App->physics->world->DestroyBody(bumperMid2->body);
+	App->physics->world->DestroyBody(bumperMid3->body);
+
+	// Destroy launchers
+	App->physics->world->DestroyBody(lanzador->body);
+	App->physics->world->DestroyBody(StaticLanzador->body);
+
+	// Destroy flippers
+	App->physics->world->DestroyBody(flipperLeft->body);
+	App->physics->world->DestroyBody(flipperLeftPoint->body);
+	App->physics->world->DestroyBody(flipperRight->body);
+	App->physics->world->DestroyBody(flipperRightPoint->body);
 
 	return true;
 }
@@ -136,15 +196,29 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	LOG("%i",score);
+	LOG("%i",App->player->score);
 	rotation += 0.2f; // Ajusta la velocidad de rotación según sea necesario
 	if (rotation >= 360.0f) {
 		rotation -= 360.0f;
 	}
-	App->renderer->Blit(disco, 30, 34,NULL, 1.0f, rotation);
+	App->renderer->Blit(disco, 31, 35,NULL, 1.0f, rotation);
 	App->renderer->Blit(background, 0, 0);
+	App->renderer->Blit(hud, 0, 0);
+	if (App->player->lifes == 3) {
+		App->renderer->Blit(gasofa, -10, 680);
+		App->renderer->Blit(gasofa, 43, 680);
+		App->renderer->Blit(gasofa, 90, 680);
+	}
+	if (App->player->lifes == 2) {
+		App->renderer->Blit(gasofa, 43, 680);
+		App->renderer->Blit(gasofa, 90, 680);
+	}
+    if (App->player->lifes == 1) {
+		App->renderer->Blit(gasofa, 90, 680);
+	}
 
-	//flippers impression
+
+	//impression
 	
 	App->renderer->Blit(flipper, moveIzq.x-30, moveIzq.y-50, NULL, 0, flipperLeft->GetRotation(),30,50);
 	App->renderer->Blit(flipper2, moveDerch.x-75,moveDerch.y-50, NULL, 0, flipperRight->GetRotation(),75,50);
@@ -158,7 +232,18 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(plat, 285, 340, NULL, 0, rightPlat->GetRotation());
 	App->renderer->Blit(plat, 325, 275, NULL, 0, topPlat->GetRotation());
 
+	//score
 	
+
+	string scoreString = to_string(App->player->score);
+	int xPos = 200 - (scoreString.size() * 16);
+
+	for (unsigned int i = 0; i < scoreString.size(); i++)
+	{
+		int digit = scoreString[i] - '0';
+
+		App->renderer->Blit(scoreFont, xPos + (i * 18), 20, &scoreRect[digit], 0.0f);
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
@@ -186,10 +271,19 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+
 		flipperLeft->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
+
 	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
 		flipperRight->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+		App->audio->PlayFx(palas);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+		App->audio->PlayFx(palas);
 	}
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -225,6 +319,13 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+	
+	//VIDAS
+	if (App->player->lifes == 0) {
+		App->fade->FadeToBlack(this, (Module*)App->game_over, 60);
+
+	}
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -246,17 +347,33 @@ void ModuleSceneIntro::CreateSensors() {
 	int RplatY = 350;
 
 	leftPlat = App->physics->CreateRectangleSensor(LplatX, LplatY, 60, 15);
+	leftWall = App->physics->CreateRectangle(LplatX-2, LplatY+15, 60, 2,NULL);
+	leftWall->body->SetType(b2_staticBody);
+
 	rightPlat = App->physics->CreateRectangleSensor(RplatX, RplatY, 60, 15);
+	rightWall = App->physics->CreateRectangle(RplatX, RplatY+15, 60, 2,NULL);
+	rightWall->body->SetType(b2_staticBody);
+
 	topPlat = App->physics->CreateRectangleSensor(355, 280, 60, 15);
+	topWall = App->physics->CreateRectangle(355, 295, 60, 2,NULL);
+	topWall->body->SetType(b2_staticBody);
 
 	b2Vec2 posLPlat(PIXEL_TO_METERS(LplatX), PIXEL_TO_METERS(LplatY));
 	b2Vec2 posTPlat(PIXEL_TO_METERS(355), PIXEL_TO_METERS(280));
 	b2Vec2 posRPlat(PIXEL_TO_METERS(RplatX), PIXEL_TO_METERS(RplatY));
 
+	b2Vec2 posLWall(PIXEL_TO_METERS(147), PIXEL_TO_METERS(360));
+	b2Vec2 posTWall(PIXEL_TO_METERS(353), PIXEL_TO_METERS(293));
+	b2Vec2 posRWall(PIXEL_TO_METERS(316), PIXEL_TO_METERS(360));
+
 
 	leftPlat->body->SetTransform(posLPlat, 0.6f); 
 	topPlat->body->SetTransform(posTPlat, 0.9f);
 	rightPlat->body->SetTransform(posRPlat, -0.6f);
+
+	leftWall->body->SetTransform(posLWall, 0.6f);
+	topWall->body->SetTransform(posTWall, 0.9f);
+	rightWall->body->SetTransform(posRWall, -0.6f);
 
 	plat = App->textures->Load("Assets/barrera.png");
 	
@@ -272,11 +389,10 @@ void ModuleSceneIntro::CreateSensors() {
 void ModuleSceneIntro::CreateBumpers() {
 	// Top bumper
 	
-	bumperTop= App->physics->CreateCircleRebote(250, 250, 36);
-	bumperBig = App->physics->CreateCircleRebote(95, 469, 23);
-	//bumperMid1 = App->physics->CreateCircleRebote(235, 490, 16);
-	bumperMid2 = App->physics->CreateCircleRebote(287, 440, 16);
-	bumperMid3 = App->physics->CreateCircleRebote(183, 440, 16);
+	bumperTop= App->physics->CreateCircleSensor(250, 250, 36);
+	bumperBig = App->physics->CreateCircleSensor(95, 467, 23);
+	bumperMid2 = App->physics->CreateCircleSensor(287, 440, 16);
+	bumperMid3 = App->physics->CreateCircleSensor(183, 440, 16);
 }
 void ModuleSceneIntro::CreateLanzador() 
 {
@@ -360,20 +476,5 @@ void ModuleSceneIntro::CreateFlippers()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
-
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }

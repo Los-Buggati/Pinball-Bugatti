@@ -4,6 +4,10 @@
 #include "p2Point.h"
 #include "Globals.h"
 #include "Animation.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+using namespace std;
 
 class PhysBody;
 
@@ -33,10 +37,13 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 
+	PhysBody* walls;
 
 	PhysBody* sensor;
 	bool sensed;
 	int ballDiametro;
+	int highScore;
+	fstream fileScore;
 
 	//Spring
 	PhysBody* lanzador;
@@ -61,19 +68,26 @@ public:
 	PhysBody* leftPlat;
 	PhysBody* rightPlat;
 	PhysBody* topPlat;
+
+	PhysBody* leftWall;
+	PhysBody* rightWall;
+	PhysBody* topWall;
 	SDL_Texture* sideKicker;
 
 	PhysBody* bola;
 	SDL_Texture* ball;
 	SDL_Texture* disco;
 	SDL_Texture* background;
+	SDL_Texture* hud;
+	SDL_Texture* gasofa;
 
 	float rotation;
-	uint bonus_fx;
+	uint palas;
 	uint music;
 	p2Point<int> ray;
 	bool ray_on;
 	bool dir;
+
 	//bumpers
 	PhysBody* bumperTop;
 	PhysBody* bumperBig;
@@ -88,8 +102,8 @@ public:
 	iPoint moveDerch;
 
 	int count;
-	int vidas;
-	int score;
+	SDL_Texture* scoreFont;
+	SDL_Rect scoreRect[10];
 
 	float bumperVel = 0.4f;
 

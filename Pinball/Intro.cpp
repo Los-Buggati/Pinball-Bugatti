@@ -37,7 +37,7 @@ bool Intro::Start()
 	//Texturas
 
 	//Audios
-	/*bonus_fx = App->audio->LoadFx("Assets/bonus.wav");*/
+	App->audio->PlayMusic("Assets/NewBugatti.wav");
 
 	return ret;
 }
@@ -65,6 +65,7 @@ update_status Intro::Update()
 		App->fade->FadeToBlack(this, (Module*)App->scene_intro, 60);		
 
 	}
+
 
 	return UPDATE_CONTINUE;
 }

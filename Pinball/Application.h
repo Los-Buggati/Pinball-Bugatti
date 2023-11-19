@@ -2,6 +2,10 @@
 
 #include "p2List.h"
 #include "Globals.h"
+#include "Module.h"
+#include "PerfTimer.h"
+#include "Timer.h"
+#include "SString.h"
 
 class Module;
 
@@ -15,6 +19,8 @@ class ModuleFadeToBlack;
 class ModuleSceneIntro;
 class ModulePhysics;
 class Intro;
+class Gameover;
+class ModuleFonts;
 
 class Application
 {
@@ -27,10 +33,37 @@ public:
 	ModulePlayer* player;
 	ModuleFadeToBlack* fade;
 	ModulePhysics* physics;
+	ModuleFonts* fonts;
+
 
 	Intro* intro;
 	ModuleSceneIntro* scene_intro;
+	Gameover* game_over;
 	
+	bool vsync;
+	bool unlimitFrames = false;
+
+	uint frames;
+	float dt;
+
+	// required variables are provided:
+	Timer startupTime;
+	PerfTimer frameTime;
+	PerfTimer lastSecFrameTime;
+
+	uint64 frameCount = 0;
+	uint32 framesPerSecond = 0;
+	uint32 lastSecFrameCount = 0;
+
+	float averageFps = 0.0f;
+	uint32 secondsSinceStartup = 0;
+
+	int argc;
+	char** args;
+	SString title;
+	SString organization;
+
+	uint32 maxFrameDuration = 16;
 
 private:
 
@@ -42,6 +75,7 @@ public:
 	~Application();
 
 	bool Init();
+
 	update_status Update();
 	bool CleanUp();
 

@@ -50,14 +50,16 @@ public:
 	PhysBody* CreateCircleSensor(int x, int y, int radius);
 	PhysBody* CreateCircleRebote(int x, int y, int radius);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateSolidChain(int x, int y, int* points, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 	b2World* world;
-	uint wheels;
 
 private:
 
+	bool gravedad;
+	float customGravity = -9.8f;
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* mouse_body;
