@@ -37,6 +37,8 @@ bool ModuleSceneIntro::Start()
 	App->physics->Enable();
 	disco = App->textures->Load("Assets/discos.png");
 	background = App->textures->Load("Assets/pinballgd.png");
+	hud = App->textures->Load("Assets/hud.png");
+	gasofa = App->textures->Load("Assets/gasofa.png");
 	CreateLanzador();
 	CreateFlippers();
 	CreateBumpers();
@@ -120,11 +122,12 @@ bool ModuleSceneIntro::Start()
 	mapa = App->physics->CreateChain(0, 0, pinball2, 114);
 	mapa->body->SetType(b2_staticBody);
 	mapa->body->GetFixtureList()->SetRestitution(0.5f);
+
 	return ret;
 	
 }
 
-// Load assets
+// Unload assets
 bool ModuleSceneIntro::CleanUp()
 {
 	
@@ -137,6 +140,8 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(piston);
 	App->textures->Unload(flipper);
 	App->textures->Unload(flipper2);
+	App->textures->Unload(hud);
+	App->textures->Unload(gasofa);
 
 	// Unload audio
 	//App->audio->UnloadFx(bonus_fx);
@@ -190,6 +195,27 @@ update_status ModuleSceneIntro::Update()
 	}
 	App->renderer->Blit(disco, 30, 34,NULL, 1.0f, rotation);
 	App->renderer->Blit(background, 0, 0);
+	App->renderer->Blit(hud, 0, 0);
+	if (App->player->lifes == 3) {
+		App->renderer->Blit(gasofa, -10, 680);
+		App->renderer->Blit(gasofa, 43, 680);
+		App->renderer->Blit(gasofa, 90, 680);
+	}
+	if (App->player->lifes == 2) {
+		App->renderer->Blit(gasofa, 43, 680);
+		App->renderer->Blit(gasofa, 90, 680);
+	}
+    if (App->player->lifes == 1) {
+		App->renderer->Blit(gasofa, 90, 680);
+	}
+
+	//if (App->player->lifes == 3) {
+	//	App->renderer->Blit(gasofa, 0, 680);
+	//}
+
+	//if (App->player->lifes == 3) {
+	//	App->renderer->Blit(gasofa, 0, 680);
+	//}
 
 	//flippers impression
 	

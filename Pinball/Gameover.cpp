@@ -65,7 +65,7 @@ update_status Gameover::Update()
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
 	{
 		App->fade->FadeToBlack(this, (Module*)App->intro, 60);
-		App->player->lifes = 1;
+		App->player->lifes = 3;
 	}
 
 

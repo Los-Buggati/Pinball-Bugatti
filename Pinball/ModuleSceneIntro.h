@@ -67,6 +67,8 @@ public:
 	SDL_Texture* ball;
 	SDL_Texture* disco;
 	SDL_Texture* background;
+	SDL_Texture* hud;
+	SDL_Texture* gasofa;
 
 	float rotation;
 	uint bonus_fx;
