@@ -33,11 +33,13 @@ Application::Application()
 
 	// Main Modules
 	AddModule(window);
+	
 	AddModule(physics);
 	AddModule(renderer);
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
+	
 	AddModule(fade);
 	
 	// Scenes

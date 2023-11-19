@@ -29,7 +29,7 @@ bool Intro::Start()
 	bool ret = true;
 
 
-	backgroundintro = App->textures->Load("Assets/pinball.png");
+	backgroundintro = App->textures->Load("Assets/inicio.png");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
