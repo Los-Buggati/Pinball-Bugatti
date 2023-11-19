@@ -14,6 +14,7 @@
 #include <sstream>
 #include <string.h>
 
+using namespace std;
 Gameover::Gameover(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
@@ -31,10 +32,17 @@ bool Gameover::Start()
 	
 	App->player->Disable();
 	
-
+	
 	gameover = App->textures->Load("Assets/gameover.png");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
+
+	for (int i = 0; i < 10; i++)
+	{
+		scoreRect[i] = { (16 + 6) * i, 0, 16, 28 };
+	}
+	scoreFont = App->textures->Load("Assets/nums.png");
+
 
 	//Texturas
 
@@ -60,6 +68,17 @@ update_status Gameover::Update()
 
 	App->renderer->Blit(gameover, 0, 0);
 
+
+	string scoreString = to_string(App->player->score);
+	int xPos = 350 - (scoreString.size() * 16);
+
+	for (unsigned int i = 0; i < scoreString.size(); i++)
+	{
+		int digit = scoreString[i] - '0';
+
+		App->renderer->Blit(scoreFont, xPos + (i * 18), 425, &scoreRect[digit], 0.0f);
+	}
+
 	// FadeTo --> SceneIntro ------------------------------------------------------
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
@@ -67,6 +86,8 @@ update_status Gameover::Update()
 		App->fade->FadeToBlack(this, (Module*)App->intro, 60);
 		App->player->lifes = 3;
 	}
+
+	
 
 
 	return UPDATE_CONTINUE;
