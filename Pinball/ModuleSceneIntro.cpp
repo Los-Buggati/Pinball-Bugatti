@@ -8,8 +8,10 @@
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
 #include "ModuleFadeToBlack.h"
+#include "ModuleFonts.h"
 #include <sstream>
 #include <string.h>
+using namespace std;
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -34,6 +36,11 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	for (int i = 0; i < 10; i++)
+	{
+		scoreRect[i] = { (16 + 6) * i, 0, 16, 28 };
+	}
+
 	App->physics->Enable();
 	disco = App->textures->Load("Assets/discos.png");
 	background = App->textures->Load("Assets/pinballgd.png");
@@ -44,6 +51,8 @@ bool ModuleSceneIntro::Start()
 	CreateBumpers();
 	CreateSensors();
 	
+	
+	scoreFont = App->textures->Load("Assets/nums.png");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -123,6 +132,7 @@ bool ModuleSceneIntro::Start()
 	mapa->body->SetType(b2_staticBody);
 	mapa->body->GetFixtureList()->SetRestitution(0.5f);
 
+
 	return ret;
 	
 }
@@ -181,7 +191,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	LOG("%i",score);
+	LOG("%i",App->player->score);
 	rotation += 0.2f; // Ajusta la velocidad de rotación según sea necesario
 	if (rotation >= 360.0f) {
 		rotation -= 360.0f;
@@ -203,7 +213,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 
-	//flippers impression
+	//impression
 	
 	App->renderer->Blit(flipper, moveIzq.x-30, moveIzq.y-50, NULL, 0, flipperLeft->GetRotation(),30,50);
 	App->renderer->Blit(flipper2, moveDerch.x-75,moveDerch.y-50, NULL, 0, flipperRight->GetRotation(),75,50);
@@ -217,7 +227,18 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(plat, 285, 340, NULL, 0, rightPlat->GetRotation());
 	App->renderer->Blit(plat, 325, 275, NULL, 0, topPlat->GetRotation());
 
+	//score
 	
+
+	string scoreString = to_string(App->player->score);
+	int xPos = 200 - (scoreString.size() * 16);
+
+	for (unsigned int i = 0; i < scoreString.size(); i++)
+	{
+		int digit = scoreString[i] - '0';
+
+		App->renderer->Blit(scoreFont, xPos + (i * 18), 20, &scoreRect[digit], 0.0f);
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{

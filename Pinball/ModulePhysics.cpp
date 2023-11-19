@@ -518,7 +518,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		if ((physA == App->scene_intro->rightSideKicker || physA == App->scene_intro->leftSideKicker))
 		{
 			App->player->kicker = true;
-			App->scene_intro->score += 50;
+			App->player->score += 50;
 			
 		}
 
@@ -543,10 +543,12 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		}
 		if (physA==App->scene_intro->bumperBig|| physA==App->scene_intro->bumperMid3||physA==App->scene_intro->bumperMid2||App->scene_intro->bumperTop)
 		{
-			
+			App->player->score + 50;
 			App->audio->PlayFx(wheels);
 ;
 		}
+		
+		
 
 		/*if ((physA == App->scene_intro->leftWall || physA == App->scene_intro->topWall))
 		{

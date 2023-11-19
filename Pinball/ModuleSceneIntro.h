@@ -95,8 +95,8 @@ public:
 	iPoint moveDerch;
 
 	int count;
-	int vidas;
-	int score;
+	SDL_Texture* scoreFont;
+	SDL_Rect scoreRect[10];
 
 	float bumperVel = 0.4f;
 

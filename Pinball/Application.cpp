@@ -11,6 +11,7 @@
 #include "Intro.h"
 #include "ModuleSceneIntro.h"
 #include "Gameover.h"
+#include "ModuleFonts.h"
 
 
 #include "Application.h"
@@ -35,6 +36,7 @@ Application::Application()
 	physics = new ModulePhysics(this);
 	fade = new ModuleFadeToBlack(this);
 	game_over = new Gameover(this);
+	fonts = new ModuleFonts(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -49,6 +51,7 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
+	AddModule(fonts);
 	
 
 	// Scenes

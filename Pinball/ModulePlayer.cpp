@@ -51,19 +51,19 @@ update_status ModulePlayer::Update()
 
 	if (rightPlat==true)
 	{
-		App->scene_intro->score += 100;
+		score += 100;
 		ball->body->ApplyForceToCenter(b2Vec2(-150, -100), 1);
 		rightPlat = false;
 	}
 	if (leftPlat==true)
 	{
-		App->scene_intro->score += 100;
+		score += 100;
 		ball->body->ApplyForceToCenter(b2Vec2(150, -100), 1);
 		leftPlat = false;
 	}
 	if (kicker==true)
 	{
-		App->scene_intro->score += 50;
+		score += 300;
 		ball->body->ApplyForceToCenter(b2Vec2(0, -200), 1);
 		kicker = false;
 	}

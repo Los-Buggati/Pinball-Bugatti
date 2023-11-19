@@ -20,6 +20,7 @@ class ModuleSceneIntro;
 class ModulePhysics;
 class Intro;
 class Gameover;
+class ModuleFonts;
 
 class Application
 {
@@ -32,6 +33,7 @@ public:
 	ModulePlayer* player;
 	ModuleFadeToBlack* fade;
 	ModulePhysics* physics;
+	ModuleFonts* fonts;
 
 
 	Intro* intro;

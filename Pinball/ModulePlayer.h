@@ -28,6 +28,8 @@ public:
 	bool leftWall;
 	bool rightWall;
 
+	int score;
+	int highScore;
 	int lifes = 3;
 
 };
