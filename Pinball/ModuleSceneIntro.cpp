@@ -120,6 +120,7 @@ bool ModuleSceneIntro::Start()
 	mapa = App->physics->CreateChain(0, 0, pinball2, 114);
 	mapa->body->SetType(b2_staticBody);
 	mapa->body->GetFixtureList()->SetRestitution(0.5f);
+
 	return ret;
 	
 }
@@ -141,7 +142,7 @@ update_status ModuleSceneIntro::Update()
 	if (rotation >= 360.0f) {
 		rotation -= 360.0f;
 	}
-	App->renderer->Blit(disco, 30, 34,NULL, 1.0f, rotation);
+	App->renderer->Blit(disco, 31, 35,NULL, 1.0f, rotation);
 	App->renderer->Blit(background, 0, 0);
 
 	//flippers impression
@@ -273,7 +274,7 @@ void ModuleSceneIntro::CreateBumpers() {
 	// Top bumper
 	
 	bumperTop= App->physics->CreateCircleRebote(250, 250, 36);
-	bumperBig = App->physics->CreateCircleRebote(95, 469, 23);
+	bumperBig = App->physics->CreateCircleRebote(95, 467, 23);
 	//bumperMid1 = App->physics->CreateCircleRebote(235, 490, 16);
 	bumperMid2 = App->physics->CreateCircleRebote(287, 440, 16);
 	bumperMid3 = App->physics->CreateCircleRebote(183, 440, 16);

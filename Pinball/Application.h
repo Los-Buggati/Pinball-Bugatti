@@ -2,6 +2,8 @@
 
 #include "p2List.h"
 #include "Globals.h"
+#include "PerfTimer.h"
+#include "Timer.h"
 
 class Module;
 
@@ -28,9 +30,28 @@ public:
 	ModuleFadeToBlack* fade;
 	ModulePhysics* physics;
 
+
 	Intro* intro;
 	ModuleSceneIntro* scene_intro;
-	
+	bool vsync;
+	bool unlimitFrames = false;
+
+	uint frames;
+	float dt;
+
+	// required variables are provided:
+	Timer startupTime;
+	PerfTimer frameTime;
+	PerfTimer lastSecFrameTime;
+
+	uint64 frameCount = 0;
+	uint32 framesPerSecond = 0;
+	uint32 lastSecFrameCount = 0;
+
+	float averageFps = 0.0f;
+	uint32 secondsSinceStartup = 0;
+
+	uint32 maxFrameDuration = 16;
 
 private:
 

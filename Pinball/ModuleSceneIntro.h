@@ -33,6 +33,7 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 
+	PhysBody* walls;
 
 	PhysBody* sensor;
 	bool sensed;
