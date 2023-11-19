@@ -28,6 +28,7 @@ public:
 
 	SDL_Texture* flipper;
 	SDL_Texture* flipper2;
+	SDL_Texture* piston;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
@@ -64,8 +65,10 @@ public:
 
 	PhysBody* bola;
 	SDL_Texture* ball;
+	SDL_Texture* disco;
 	SDL_Texture* background;
 
+	float rotation;
 	uint bonus_fx;
 	uint music;
 	p2Point<int> ray;

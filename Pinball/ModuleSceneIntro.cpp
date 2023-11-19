@@ -33,8 +33,8 @@ bool ModuleSceneIntro::Start()
 	int vidas = 3;
 
 	App->physics->Enable();
-
-	background = App->textures->Load("Assets/pinball2.png");
+	disco = App->textures->Load("Assets/discos.png");
+	background = App->textures->Load("Assets/pinballgd.png");
 	CreateLanzador();
 	CreateFlippers();
 	CreateBumpers();
@@ -135,18 +135,26 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	LOG("%i",score);
+	rotation += 0.2f; // Ajusta la velocidad de rotación según sea necesario
+	if (rotation >= 360.0f) {
+		rotation -= 360.0f;
+	}
+	App->renderer->Blit(disco, 30, 34,NULL, 1.0f, rotation);
 	App->renderer->Blit(background, 0, 0);
 
-	//App->renderer->Blit(sideKicker, 26, 500);
-	//App->renderer->Blit(sideKicker, 388, 500);
-
 	//flippers impression
-
+	
 	App->renderer->Blit(flipper, moveIzq.x-30, moveIzq.y-50, NULL, 0, flipperLeft->GetRotation(),30,50);
 	App->renderer->Blit(flipper2, moveDerch.x-75,moveDerch.y-50, NULL, 0, flipperRight->GetRotation(),75,50);
+
+	int lanzaX, lanzaY;
+	lanzador->GetPosition(lanzaX, lanzaY);
+	App->renderer->Blit(piston, lanzaX, lanzaY, NULL, 0, lanzador->GetRotation());
 	
-	
-	App->renderer->Blit(plat, 93,300, NULL,0,leftPlat->GetRotation());
+
+	App->renderer->Blit(plat, 120,340, NULL,0,leftPlat->GetRotation());
+	App->renderer->Blit(plat, 285, 340, NULL, 0, rightPlat->GetRotation());
+	App->renderer->Blit(plat, 325, 275, NULL, 0, topPlat->GetRotation());
 
 	
 
@@ -237,18 +245,19 @@ void ModuleSceneIntro::CreateSensors() {
 
 	leftPlat = App->physics->CreateRectangleSensor(LplatX, LplatY, 60, 15);
 	rightPlat = App->physics->CreateRectangleSensor(RplatX, RplatY, 60, 15);
-	topPlat = App->physics->CreateRectangleSensor(355, 310, 50, 10);
+	topPlat = App->physics->CreateRectangleSensor(355, 280, 60, 15);
 
 	b2Vec2 posLPlat(PIXEL_TO_METERS(LplatX), PIXEL_TO_METERS(LplatY));
-	b2Vec2 posTPlat(PIXEL_TO_METERS(355), PIXEL_TO_METERS(310));
+	b2Vec2 posTPlat(PIXEL_TO_METERS(355), PIXEL_TO_METERS(280));
 	b2Vec2 posRPlat(PIXEL_TO_METERS(RplatX), PIXEL_TO_METERS(RplatY));
 
 
 	leftPlat->body->SetTransform(posLPlat, 0.6f); 
-	topPlat->body->SetTransform(posTPlat, 0.7f);
+	topPlat->body->SetTransform(posTPlat, 0.9f);
 	rightPlat->body->SetTransform(posRPlat, -0.6f);
 
-	plat = App->textures->Load("Assets/rebota.png");
+	plat = App->textures->Load("Assets/barrera.png");
+	
 
 
 	// --- Sensors that just do what a sensor do ---
@@ -262,10 +271,10 @@ void ModuleSceneIntro::CreateBumpers() {
 	// Top bumper
 	
 	bumperTop= App->physics->CreateCircleRebote(250, 250, 36);
-	bumperBig = App->physics->CreateCircleRebote(97, 470, 20);
+	bumperBig = App->physics->CreateCircleRebote(95, 469, 23);
 	//bumperMid1 = App->physics->CreateCircleRebote(235, 490, 16);
-	bumperMid2 = App->physics->CreateCircleRebote(263, 440, 16);
-	bumperMid3 = App->physics->CreateCircleRebote(203, 440, 16);
+	bumperMid2 = App->physics->CreateCircleRebote(287, 440, 16);
+	bumperMid3 = App->physics->CreateCircleRebote(183, 440, 16);
 }
 void ModuleSceneIntro::CreateLanzador() 
 {
@@ -286,6 +295,8 @@ void ModuleSceneIntro::CreateLanzador()
 	MuelleJointDef.frequencyHz = 7.0f;
 	MuelleJointDef.dampingRatio = 0.5f;
 	b2PrismaticJoint* MuelleJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&MuelleJointDef);
+
+	piston = App->textures->Load("Assets/lanzador.png");
 
 }
 

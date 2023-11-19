@@ -21,7 +21,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	bola = App->textures->Load("Assets/bola.png");
-	ball = App->physics->CreateCircle(390, 477, 12);
+	ball = App->physics->CreateCircle(390, 477, 14);
 	ball->listener = this;
 	circles.add(ball);
 	return true;
