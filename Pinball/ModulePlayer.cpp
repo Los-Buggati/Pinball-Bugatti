@@ -6,7 +6,8 @@
 #include "ModuleTextures.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleAudio.h"
-
+#include "ModuleFadeToBlack.h"
+#include "Intro.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -42,6 +43,7 @@ update_status ModulePlayer::Update()
 	if (death == true)
 	{
 		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(390), PIXEL_TO_METERS(477)), 0);
+		lifes = lifes - 1;
 		death = false;
 		
 		//App->physics->world->DestroyBody(Door->body);
@@ -65,6 +67,7 @@ update_status ModulePlayer::Update()
 		ball->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 		kicker = false;
 	}
+
 
 
 	int x, y;

@@ -26,4 +26,6 @@ public:
 	bool leftPlat;
 	bool rightPlat;
 
+	int lifes = 1;
+
 };

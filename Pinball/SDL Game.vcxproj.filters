@@ -65,6 +65,9 @@
     <ClInclude Include="ModuleFadeToBlack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gameover.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -104,6 +107,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ModuleFadeToBlack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameover.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

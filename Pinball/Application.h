@@ -15,6 +15,7 @@ class ModuleFadeToBlack;
 class ModuleSceneIntro;
 class ModulePhysics;
 class Intro;
+class Gameover;
 
 class Application
 {
@@ -30,6 +31,7 @@ public:
 
 	Intro* intro;
 	ModuleSceneIntro* scene_intro;
+	Gameover* game_over;
 	
 
 private:

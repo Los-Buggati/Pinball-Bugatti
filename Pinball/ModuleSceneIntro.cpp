@@ -7,6 +7,7 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
+#include "ModuleFadeToBlack.h"
 #include <sstream>
 #include <string.h>
 
@@ -32,7 +33,6 @@ bool ModuleSceneIntro::Start()
 	App->player->Enable();
 	LOG("Loading Intro assets");
 	bool ret = true;
-	int vidas = 3;
 
 	App->physics->Enable();
 	disco = App->textures->Load("Assets/discos.png");
@@ -129,7 +129,54 @@ bool ModuleSceneIntro::CleanUp()
 {
 	
 	LOG("Unloading Intro scene");
+	
+	App->textures->Unload(disco);
+	App->textures->Unload(background);
+	App->textures->Unload(sideKicker);
+	App->textures->Unload(plat);
+	App->textures->Unload(piston);
+	App->textures->Unload(flipper);
+	App->textures->Unload(flipper2);
 
+	// Unload audio
+	//App->audio->UnloadFx(bonus_fx);
+
+	// Disable modules
+
+	// Destroy scene elements
+	if (mapa != nullptr) {
+		App->physics->world->DestroyBody(mapa->body);
+		mapa = nullptr;
+	}
+
+	// Destroy sensors
+	App->physics->world->DestroyBody(sensor->body);
+	App->physics->world->DestroyBody(rightSideKicker->body);
+	App->physics->world->DestroyBody(leftSideKicker->body);
+	App->physics->world->DestroyBody(leftPlat->body);
+	App->physics->world->DestroyBody(rightPlat->body);
+	App->physics->world->DestroyBody(topPlat->body);
+	App->physics->world->DestroyBody(loseSensor->body);
+
+	// Destroy bumpers
+	App->physics->world->DestroyBody(bumperTop->body);
+	App->physics->world->DestroyBody(bumperBig->body);
+	App->physics->world->DestroyBody(bumperMid2->body);
+	App->physics->world->DestroyBody(bumperMid3->body);
+
+	// Destroy launchers
+	App->physics->world->DestroyBody(lanzador->body);
+	App->physics->world->DestroyBody(StaticLanzador->body);
+
+	// Destroy flippers
+	App->physics->world->DestroyBody(flipperLeft->body);
+	App->physics->world->DestroyBody(flipperLeftPoint->body);
+	App->physics->world->DestroyBody(flipperRight->body);
+	App->physics->world->DestroyBody(flipperRightPoint->body);
+
+
+
+	
 	return true;
 }
 
@@ -225,6 +272,13 @@ update_status ModuleSceneIntro::Update()
 		if(normal.x != 0.0f)
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
+	
+	//VIDAS
+	if (App->player->lifes == 0) {
+		App->fade->FadeToBlack(this, (Module*)App->game_over, 60);
+
+	}
+	
 
 	return UPDATE_CONTINUE;
 }

@@ -1,4 +1,4 @@
-#include "Intro.h"
+#include "Gameover.h"
 
 #include "Globals.h"
 #include "Application.h"
@@ -14,23 +14,25 @@
 #include <sstream>
 #include <string.h>
 
-Intro::Intro(Application* app, bool start_enabled) : Module(app, start_enabled)
+Gameover::Gameover(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	
+
 
 }
 
-Intro::~Intro()
+Gameover::~Gameover()
 {}
 
 // Load assets
-bool Intro::Start()
+bool Gameover::Start()
 {
 	LOG("Loading Intro assets");
-	bool ret = true;
+	bool ret = true;	
+	
+	App->player->Disable();
+	
 
-
-	backgroundintro = App->textures->Load("Assets/inicio.png");
+	gameover = App->textures->Load("Assets/gameover.png");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -43,7 +45,7 @@ bool Intro::Start()
 }
 
 // Load assets
-bool Intro::CleanUp()
+bool Gameover::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
@@ -51,29 +53,21 @@ bool Intro::CleanUp()
 }
 
 // Update: draw background
-update_status Intro::Update()
+update_status Gameover::Update()
 {
-	
+
 	//Background Draw
 
-	App->renderer->Blit(backgroundintro, 0, 0);
+	App->renderer->Blit(gameover, 0, 0);
 
 	// FadeTo --> SceneIntro ------------------------------------------------------
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
 	{
-		App->fade->FadeToBlack(this, (Module*)App->scene_intro, 60);		
-
+		App->fade->FadeToBlack(this, (Module*)App->intro, 60);
+		App->player->lifes = 1;
 	}
 
 
 	return UPDATE_CONTINUE;
 }
-
-
-
-
-
-
-
-
