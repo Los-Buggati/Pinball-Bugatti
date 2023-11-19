@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
 #include <sstream>
 #include <string.h>
 
@@ -28,6 +29,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
+	App->player->Enable();
 	LOG("Loading Intro assets");
 	bool ret = true;
 	int vidas = 3;

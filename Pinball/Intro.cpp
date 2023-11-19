@@ -9,6 +9,7 @@
 #include "ModuleAudio.h"
 #include "ModuleTextures.h"
 #include "ModuleFadeToBlack.h"
+#include "ModulePlayer.h"
 
 #include <sstream>
 #include <string.h>
@@ -61,7 +62,8 @@ update_status Intro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 	{
-		App->fade->FadeToBlack(this, (Module*)App->scene_intro, 60);
+		App->fade->FadeToBlack(this, (Module*)App->scene_intro, 60);		
+
 	}
 
 	return UPDATE_CONTINUE;

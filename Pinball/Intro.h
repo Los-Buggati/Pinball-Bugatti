@@ -22,6 +22,7 @@ public:
 
 public:
 	SDL_Texture* backgroundintro;
+	Module* moduleToEnable = nullptr;
 
 };
 
