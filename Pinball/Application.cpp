@@ -183,7 +183,7 @@ update_status Application::Update()
 
 	// Shows the time measurements in the window title
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ",
+	sprintf_s(title, 256, "Av.FPS: %.2f Last FPS: %i Last dt: %.0f High score:  %I32u Frame Count: %I64u ",
 		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
 
 	window->SetTitle(title);

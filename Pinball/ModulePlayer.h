@@ -23,6 +23,7 @@ public:
 	uint wheels;
 	uint flush;
 	uint platform;
+	uint combo;
 
 	bool death;
 	bool kicker;
@@ -30,8 +31,10 @@ public:
 	bool rightPlat;
 	bool leftWall;
 	bool rightWall;
-	bool rueda;
+	bool changeForce;
+	bool combito;
 
+	int force=100;
 	int score;
 	int highScore;
 	int lifes = 3;

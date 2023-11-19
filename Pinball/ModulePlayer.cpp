@@ -7,6 +7,7 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleAudio.h"
 #include "ModuleFadeToBlack.h"
+#include "ModuleInput.h"
 #include "Intro.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -20,8 +21,8 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
-
-	
+	score = 0;
+	combo = App->audio->LoadFx("Assets/combo.wav");
 	flush = App->audio->LoadFx("Assets/flush.wav");
 	platform = App->audio->LoadFx("Assets/rueda.wav");
 	bola = App->textures->Load("Assets/bola.png");
@@ -42,7 +43,18 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		changeForce = !changeForce;
+	}
+	if (changeForce==true)
+	{
+		force = 300;
+	}
+	else
+	{
+		force = 100;
+	}
 	if (death == true)
 	{
 		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(390), PIXEL_TO_METERS(477)), 0);
@@ -55,7 +67,7 @@ update_status ModulePlayer::Update()
 	if (rightPlat==true)
 	{
 		score += 100;
-		ball->body->ApplyForceToCenter(b2Vec2(-150, -100), 1);
+		ball->body->ApplyForceToCenter(b2Vec2(-150, -force), 1);
 		App->audio->PlayFx(platform);
 		rightPlat = false;
 		
@@ -63,7 +75,7 @@ update_status ModulePlayer::Update()
 	if (leftPlat==true)
 	{
 		score += 100;
-		ball->body->ApplyForceToCenter(b2Vec2(150, -100), 1);
+		ball->body->ApplyForceToCenter(b2Vec2(150, -force), 1);
 		App->audio->PlayFx(platform);
 		leftPlat = false;
 	}
@@ -73,12 +85,6 @@ update_status ModulePlayer::Update()
 		ball->body->ApplyForceToCenter(b2Vec2(0, -200), 1);
 		App->audio->PlayFx(flush);
 		kicker = false;
-	}
-	if (rueda==true)
-	{
-		score += 50;
-		App->audio->PlayFx(wheels);
-		rueda = false;
 	}
 	if (rightWall==true)
 	{
@@ -95,7 +101,10 @@ update_status ModulePlayer::Update()
 		leftWall = false;
 	}
 
-
+	if (score % 1000)
+	{
+		App->audio->PlayFx(combo);
+	}
 
 	int x, y;
 	ball->GetPosition(x, y);

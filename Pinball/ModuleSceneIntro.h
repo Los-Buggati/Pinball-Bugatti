@@ -4,6 +4,10 @@
 #include "p2Point.h"
 #include "Globals.h"
 #include "Animation.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+using namespace std;
 
 class PhysBody;
 
@@ -38,6 +42,8 @@ public:
 	PhysBody* sensor;
 	bool sensed;
 	int ballDiametro;
+	int highScore;
+	fstream fileScore;
 
 	//Spring
 	PhysBody* lanzador;
@@ -81,6 +87,7 @@ public:
 	p2Point<int> ray;
 	bool ray_on;
 	bool dir;
+
 	//bumpers
 	PhysBody* bumperTop;
 	PhysBody* bumperBig;
