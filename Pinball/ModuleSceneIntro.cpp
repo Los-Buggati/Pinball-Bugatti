@@ -173,6 +173,9 @@ bool ModuleSceneIntro::CleanUp()
 	App->physics->world->DestroyBody(rightPlat->body);
 	App->physics->world->DestroyBody(topPlat->body);
 	App->physics->world->DestroyBody(loseSensor->body);
+	App->physics->world->DestroyBody(leftWall->body);
+	App->physics->world->DestroyBody(rightWall->body);
+	App->physics->world->DestroyBody(topWall->body);
 
 	// Destroy bumpers
 	App->physics->world->DestroyBody(bumperTop->body);
