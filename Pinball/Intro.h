@@ -6,6 +6,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 #include "Animation.h"
+#include "ModuleTextures.h"
 
 
 class Intro : public Module

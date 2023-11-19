@@ -38,9 +38,12 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
+	AddModule(fade);
 	
 	// Scenes
+	AddModule(intro);
 	AddModule(scene_intro);
+
 	
 	// Player
 	AddModule(player);
