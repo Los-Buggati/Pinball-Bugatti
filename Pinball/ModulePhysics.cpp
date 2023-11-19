@@ -37,7 +37,6 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-	wheels = App->audio->LoadFx("Assets/rueda.mp3");
 
 	// big static circle as "ground" in the middle of the screen
 	
@@ -541,21 +540,15 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 			
 			
 		}
-		if (physA==App->scene_intro->bumperBig|| physA==App->scene_intro->bumperMid3||physA==App->scene_intro->bumperMid2||App->scene_intro->bumperTop)
-		{
-			App->player->score + 50;
-			App->audio->PlayFx(wheels);
-;
-		}
 		
 		
 
-		/*if ((physA == App->scene_intro->leftWall || physA == App->scene_intro->topWall))
+		if ((physA == App->scene_intro->leftWall || physA == App->scene_intro->topWall))
 		{
 			App->player->leftWall=true;
 		}
 		if (physA == App->scene_intro->rightWall)
 		{
 			App->player->rightWall = true;
-		}*/
+		}
 }

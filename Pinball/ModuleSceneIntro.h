@@ -76,7 +76,7 @@ public:
 	SDL_Texture* gasofa;
 
 	float rotation;
-	uint bonus_fx;
+	uint palas;
 	uint music;
 	p2Point<int> ray;
 	bool ray_on;

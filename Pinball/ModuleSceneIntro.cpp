@@ -64,7 +64,7 @@ bool ModuleSceneIntro::Start()
 	
 	//Audios
 	App->audio->PlayMusic("Assets/music.wav");
-	bonus_fx = App->audio->LoadFx("Assets/bonus.wav");
+	palas = App->audio->LoadFx("Assets/metal.wav");
 	
 	sensor = App->physics->CreateRectangleSensor(220, 770, 100, 50);
 
@@ -266,10 +266,19 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+
 		flipperLeft->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
+
 	}
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
 		flipperRight->body->ApplyForceToCenter(b2Vec2(0, flipperforce), 1);
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+		App->audio->PlayFx(palas);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+		App->audio->PlayFx(palas);
 	}
 	// Prepare for raycast ------------------------------------------------------
 	
@@ -375,11 +384,10 @@ void ModuleSceneIntro::CreateSensors() {
 void ModuleSceneIntro::CreateBumpers() {
 	// Top bumper
 	
-	bumperTop= App->physics->CreateCircleRebote(250, 250, 36);
-	bumperBig = App->physics->CreateCircleRebote(95, 467, 23);
-	//bumperMid1 = App->physics->CreateCircleRebote(235, 490, 16);
-	bumperMid2 = App->physics->CreateCircleRebote(287, 440, 16);
-	bumperMid3 = App->physics->CreateCircleRebote(183, 440, 16);
+	bumperTop= App->physics->CreateCircleSensor(250, 250, 36);
+	bumperBig = App->physics->CreateCircleSensor(95, 467, 23);
+	bumperMid2 = App->physics->CreateCircleSensor(287, 440, 16);
+	bumperMid3 = App->physics->CreateCircleSensor(183, 440, 16);
 }
 void ModuleSceneIntro::CreateLanzador() 
 {
@@ -463,8 +471,5 @@ void ModuleSceneIntro::CreateFlippers()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-
-	App->audio->PlayFx(bonus_fx);
 
 }

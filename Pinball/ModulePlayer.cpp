@@ -21,6 +21,9 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
+	
+	flush = App->audio->LoadFx("Assets/flush.wav");
+	platform = App->audio->LoadFx("Assets/rueda.wav");
 	bola = App->textures->Load("Assets/bola.png");
 	ball = App->physics->CreateCircle(390, 477, 12);
 	ball->listener = this;
@@ -53,32 +56,44 @@ update_status ModulePlayer::Update()
 	{
 		score += 100;
 		ball->body->ApplyForceToCenter(b2Vec2(-150, -100), 1);
+		App->audio->PlayFx(platform);
 		rightPlat = false;
+		
 	}
 	if (leftPlat==true)
 	{
 		score += 100;
 		ball->body->ApplyForceToCenter(b2Vec2(150, -100), 1);
+		App->audio->PlayFx(platform);
 		leftPlat = false;
 	}
 	if (kicker==true)
 	{
 		score += 300;
 		ball->body->ApplyForceToCenter(b2Vec2(0, -200), 1);
+		App->audio->PlayFx(flush);
 		kicker = false;
 	}
-	/*if (rightWall==true)
+	if (rueda==true)
 	{
-		App->scene_intro->score += 100;
+		score += 50;
+		App->audio->PlayFx(wheels);
+		rueda = false;
+	}
+	if (rightWall==true)
+	{
+		score += 100;
 		ball->body->ApplyForceToCenter(b2Vec2(150, 100), 1);
+		App->audio->PlayFx(platform);
 		rightWall = false;
 	}
 	if (leftWall==true)
 	{
-		App->scene_intro->score += 100;
+		score += 100;
 		ball->body->ApplyForceToCenter(b2Vec2(-150, 100), 1);
+		App->audio->PlayFx(platform);
 		leftWall = false;
-	}*/
+	}
 
 
 

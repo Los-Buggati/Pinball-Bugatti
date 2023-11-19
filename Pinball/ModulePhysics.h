@@ -55,7 +55,6 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 	b2World* world;
-	uint wheels;
 
 private:
 

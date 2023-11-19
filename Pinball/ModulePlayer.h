@@ -20,6 +20,9 @@ public:
 	PhysBody* ball;
 	iPoint position;
 	SDL_Texture* bola;
+	uint wheels;
+	uint flush;
+	uint platform;
 
 	bool death;
 	bool kicker;
@@ -27,6 +30,7 @@ public:
 	bool rightPlat;
 	bool leftWall;
 	bool rightWall;
+	bool rueda;
 
 	int score;
 	int highScore;
