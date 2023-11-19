@@ -144,9 +144,12 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(gasofa);
 
 	// Unload audio
-	//App->audio->UnloadFx(bonus_fx);
+
+
 
 	// Disable modules
+
+
 
 	// Destroy scene elements
 	if (mapa != nullptr) {
@@ -179,9 +182,6 @@ bool ModuleSceneIntro::CleanUp()
 	App->physics->world->DestroyBody(flipperRight->body);
 	App->physics->world->DestroyBody(flipperRightPoint->body);
 
-
-
-	
 	return true;
 }
 
@@ -209,13 +209,6 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(gasofa, 90, 680);
 	}
 
-	//if (App->player->lifes == 3) {
-	//	App->renderer->Blit(gasofa, 0, 680);
-	//}
-
-	//if (App->player->lifes == 3) {
-	//	App->renderer->Blit(gasofa, 0, 680);
-	//}
 
 	//flippers impression
 	
@@ -444,16 +437,4 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
