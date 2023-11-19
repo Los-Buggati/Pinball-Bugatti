@@ -4,14 +4,17 @@
 #include "Globals.h"
 
 class Module;
+
 class ModuleRender;
 class ModuleWindow;
 class ModuleTextures;
 class ModuleInput;
 class ModuleAudio;
 class ModulePlayer;
+class ModuleFadeToBlack;
 class ModuleSceneIntro;
 class ModulePhysics;
+class Intro;
 
 class Application
 {
@@ -22,8 +25,12 @@ public:
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModulePlayer* player;
-	ModuleSceneIntro* scene_intro;
+	ModuleFadeToBlack* fade;
 	ModulePhysics* physics;
+
+	Intro* intro;
+	ModuleSceneIntro* scene_intro;
+	
 
 private:
 

@@ -1,3 +1,5 @@
+#ifndef __GLOBALS_H__
+#define __GLOBALS_H__
 #pragma once
 #include <windows.h>
 #include <stdio.h>
@@ -20,7 +22,7 @@ enum update_status
 	UPDATE_ERROR
 };
 
-// Configuration -----------
+// Window Configuration -----------
 #define SCREEN_WIDTH 468
 #define SCREEN_HEIGHT 768
 #define SCREEN_SIZE 1
@@ -30,3 +32,5 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "2D Physics Playground"
+
+#endif // __GLOBALS_H__

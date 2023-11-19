@@ -10,7 +10,7 @@ class PhysBody;
 class ModuleSceneIntro : public Module
 {
 public:
-	ModuleSceneIntro(Application* app, bool start_enabled = true);
+	ModuleSceneIntro(Application* app, bool start_enabled = false);
 	~ModuleSceneIntro();
 
 	bool Start();
