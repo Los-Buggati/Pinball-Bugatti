@@ -36,7 +36,7 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
-
+	App->textures->Unload(bola);
 	return true;
 }
 
@@ -57,10 +57,15 @@ update_status ModulePlayer::Update()
 	}
 	if (death == true)
 	{
-		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(390), PIXEL_TO_METERS(477)), 0);
-		lifes = lifes - 1;
-		death = false;
-		
+		if (lifes==0)
+		{
+
+		}
+		else {
+			ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(390), PIXEL_TO_METERS(477)), 0);
+			lifes = lifes - 1;
+			death = false;
+		}
 		//App->physics->world->DestroyBody(Door->body);
 	}
 
@@ -101,7 +106,7 @@ update_status ModulePlayer::Update()
 		leftWall = false;
 	}
 
-	if (score % 1000)
+	if (score == 2000)
 	{
 		App->audio->PlayFx(combo);
 	}
