@@ -24,11 +24,13 @@ Start:
 
 ## Debug features:
 
-- See the Colliders: Keyboard = F1 
+- See the Colliders: Keyboard = F1
 
-- FPS cap: Keyboard = F11
+- Force modifier = F2
 
 - Gravity modifier = F3
+
+- FPS cap: Keyboard = F11
 
 (You can use the mouse to move the ball as you wish)
 
